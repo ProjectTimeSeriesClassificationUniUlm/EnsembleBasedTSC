@@ -2,6 +2,11 @@
 
 Overleaf: https://www.overleaf.com/project/636bb3f1b09746afcf5d5233
 
+Until 08.12.: 
+- Finish writing
+- Read the text of the other and write todos
+- Start presentation
+
 
 ### Critical Remarks
 
