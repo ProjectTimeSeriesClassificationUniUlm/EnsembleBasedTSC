@@ -9,6 +9,8 @@ def get_MLP(input_size, output_size):
     :param input_size: number of features of the input data
     :param output_size: number of classes
     :return: keras sequential model of the MLP
+
+    Is ResNet really better or just larger?
     """
     return keras.Sequential([
         keras.layers.Dropout(0.1),
@@ -45,6 +47,8 @@ def get_FCN(input_size, output_size):
         keras.layers.Activation('relu'),
 
         keras.layers.GlobalAveragePooling1D(),
+        keras.layers.Flatten(),
+        keras.layers.Dense(output_size, activation='softmax'),
     ])
 
 
