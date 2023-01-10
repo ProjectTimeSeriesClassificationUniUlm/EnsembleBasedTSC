@@ -45,6 +45,7 @@ def get_FCN(input_size, output_size):
         keras.layers.Activation('relu'),
 
         keras.layers.GlobalAveragePooling1D(),
+        keras.layers.Dense(output_size, activation='softmax'),
     ])
 
 
