@@ -2,6 +2,21 @@ import numpy as np
 from sktime.datasets import load_from_tsfile_to_dataframe
 import os
 import warnings
+from enum import Enum
+
+
+class CurrentDatasets(Enum):
+    abnormal_heartbeat = "abnormal_heartbeat"
+    arrow_head = "arrow_head"
+    coffee_beans = "coffee_beans"
+    cricket_y = "cricket_y"
+    distal_phalanx_outline = "distal_phalanx_outline"
+    electric_devices = "electric_devices"
+    freezers = "freezers"
+    phalanges_outlines_correct = "phalanges_outlines_correct"
+    share_price_increase = "share_price_increase"
+    swedish_leaf = "swedish_leaf"
+    wafer = "wafer"
 
 
 def load_numpy_array_from_ts(path_to_file):
