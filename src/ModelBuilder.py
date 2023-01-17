@@ -1,5 +1,7 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 from tensorflow import keras
+from toolz.functoolz import thread_first
 
 
 def get_MLP(input_size, output_size):
@@ -48,6 +50,46 @@ def get_FCN(input_size, output_size):
         keras.layers.Dense(output_size, activation='softmax'),
     ])
 
+def get_Encoder(input_size, output_size):
+    """
+    Create a Encoder Model based on
+    Z. Wang, W. Yan, and T. Oates, “Time series classification from scratch with deep neural networks: A strong baseline”, 2017
+    :param input_size: number of features of the input data
+    :param output_size: number of classes
+    :return: keras sequential model of the Encoder
+    """
+    inputs = keras.layers.Input((input_size, 1))
+    convolutions = thread_first(
+        inputs,
+        keras.layers.Conv1D(filters=128, kernel_size=5, strides=1, padding='same'),
+        tfa.layers.InstanceNormalization(),
+        keras.layers.PReLU(shared_axes=[1]),
+        keras.layers.Dropout(rate=0.2),
+        keras.layers.MaxPooling1D(pool_size=2),
+
+        keras.layers.Conv1D(filters=256, kernel_size=11, strides=1, padding='same'),
+        tfa.layers.InstanceNormalization(),
+        keras.layers.PReLU(shared_axes=[1]),
+        keras.layers.Dropout(rate=0.2),
+        keras.layers.MaxPooling1D(pool_size=2),
+
+        keras.layers.Conv1D(filters=512, kernel_size=21, strides=1, padding='same'),
+        tfa.layers.InstanceNormalization(),
+        keras.layers.PReLU(shared_axes=[1]),
+        keras.layers.Dropout(rate=0.2))
+    attention_data = keras.layers.Lambda(lambda x: x[:,:,:256])(convolutions)
+    attention_softmax = thread_first(
+        convolutions,
+        keras.layers.Lambda(lambda x: x[:,:,256:]),
+        keras.layers.Softmax())
+    outputs = thread_first(
+        [attention_data, attention_softmax],
+        keras.layers.Multiply(),
+        keras.layers.Dense(units=256, activation='sigmoid'),
+        tfa.layers.InstanceNormalization(),
+        keras.layers.Flatten(),
+        keras.layers.Dense(units=output_size, activation='softmax'))
+    return keras.models.Model(inputs=inputs, outputs=outputs)
 
 def get_MCDCNN(input_size, output_size):
     return keras.Sequential([
