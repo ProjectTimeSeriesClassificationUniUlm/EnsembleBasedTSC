@@ -50,6 +50,76 @@ def get_FCN(input_size, output_size):
         keras.layers.Dense(output_size, activation='softmax'),
     ])
 
+
+def get_Resnet(input_size, output_size, filters=64):
+    """
+    Create a Resnet Model based on
+    Z. Wang, W. Yan, and T. Oates, “Time series classification from scratch with deep neural networks: A strong baseline”, 2017
+    :param input_size: number of features of the input data
+    :param output_size: number of classes
+    :return: keras sequential model of the Encoder
+    """
+    inputs = keras.layers.Input((input_size, 1))
+
+    convolutions1 = thread_first(
+        inputs,
+        keras.layers.Conv1D(filters=filters, kernel_size=8, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters, kernel_size=5, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters, kernel_size=3, padding='same'),
+        keras.layers.BatchNormalization())
+    shortcut1 = thread_first(
+        inputs,
+        keras.layers.Conv1D(filters=filters, kernel_size=1, padding='same'),
+        keras.layers.BatchNormalization())
+    block1 = thread_first(
+        keras.layers.add([shortcut1, convolutions1]),
+        keras.layers.Activation('relu'))
+
+    convolutions2 = thread_first(
+        block1,
+        keras.layers.Conv1D(filters=filters*2, kernel_size=8, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters*2, kernel_size=5, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters*2, kernel_size=3, padding='same'),
+        keras.layers.BatchNormalization())
+    shortcut2 = thread_first(
+        block1,
+        keras.layers.Conv1D(filters=filters*2, kernel_size=1, padding='same'),
+        keras.layers.BatchNormalization())
+    block2 = thread_first(
+        keras.layers.add([shortcut2, convolutions2]),
+        keras.layers.Activation('relu'))
+
+    convolutions3 = thread_first(
+        block2,
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=8, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=5, padding='same'),
+        keras.layers.BatchNormalization(),
+        keras.layers.Activation('relu'),
+
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=3, padding='same'),
+        keras.layers.BatchNormalization())
+    shortcut3 = keras.layers.BatchNormalization()(block2)
+    block3 = thread_first(
+        keras.layers.add([shortcut3, convolutions3]),
+        keras.layers.Activation('relu'),
+        keras.layers.GlobalAveragePooling1D(),
+        keras.layers.Dense(output_size, activation='softmax'))
+    return keras.models.Model(inputs=inputs, outputs=block3)
 def get_Encoder(input_size, output_size):
     """
     Create a Encoder Model based on
