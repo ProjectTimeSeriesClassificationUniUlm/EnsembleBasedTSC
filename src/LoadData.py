@@ -65,8 +65,12 @@ def get_all_datasets_test_train_np_arrays(path_to_datasets):
 
     datasets_test_path_train_path = get_all_datasets_info(path_to_datasets)
     for ds_name, (test_file, train_file) in datasets_test_path_train_path.items():
-        x_test, y_test = load_numpy_array_from_ts(test_file)
-        x_train, y_train = load_numpy_array_from_ts(train_file)
+        x_test, y_test_raw = load_numpy_array_from_ts(test_file)
+        x_train, y_train_raw = load_numpy_array_from_ts(train_file)
+        lookup_table, y_train = np.unique(y_train_raw, return_inverse=True)
+        lookup_table_dict = dict(zip(lookup_table, list(range(len(lookup_table)))))
+        y_test = np.array(list(map(lambda label: lookup_table_dict[label], y_test_raw)))
+        
         datasets_test_train_np_arrays[ds_name] = dict()
         datasets_test_train_np_arrays[ds_name]["test_data"] = x_test, y_test
         datasets_test_train_np_arrays[ds_name]["train_data"] = x_train, y_train
