@@ -83,19 +83,19 @@ def get_Resnet(input_size, output_size, filters=64):
 
     convolutions2 = thread_first(
         block1,
-        keras.layers.Conv1D(filters=filters*2, kernel_size=8, padding='same'),
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=8, padding='same'),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 
-        keras.layers.Conv1D(filters=filters*2, kernel_size=5, padding='same'),
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=5, padding='same'),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 
-        keras.layers.Conv1D(filters=filters*2, kernel_size=3, padding='same'),
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=3, padding='same'),
         keras.layers.BatchNormalization())
     shortcut2 = thread_first(
         block1,
-        keras.layers.Conv1D(filters=filters*2, kernel_size=1, padding='same'),
+        keras.layers.Conv1D(filters=filters * 2, kernel_size=1, padding='same'),
         keras.layers.BatchNormalization())
     block2 = thread_first(
         keras.layers.add([shortcut2, convolutions2]),
@@ -120,6 +120,8 @@ def get_Resnet(input_size, output_size, filters=64):
         keras.layers.GlobalAveragePooling1D(),
         keras.layers.Dense(output_size, activation='softmax'))
     return keras.models.Model(inputs=inputs, outputs=block3)
+
+
 def get_Encoder(input_size, output_size):
     """
     Create a Encoder Model based on
@@ -147,10 +149,10 @@ def get_Encoder(input_size, output_size):
         tfa.layers.InstanceNormalization(),
         keras.layers.PReLU(shared_axes=[1]),
         keras.layers.Dropout(rate=0.2))
-    attention_data = keras.layers.Lambda(lambda x: x[:,:,:256])(convolutions)
+    attention_data = keras.layers.Lambda(lambda x: x[:, :, :256])(convolutions)
     attention_softmax = thread_first(
         convolutions,
-        keras.layers.Lambda(lambda x: x[:,:,256:]),
+        keras.layers.Lambda(lambda x: x[:, :, 256:]),
         keras.layers.Softmax())
     outputs = thread_first(
         [attention_data, attention_softmax],
@@ -160,6 +162,7 @@ def get_Encoder(input_size, output_size):
         keras.layers.Flatten(),
         keras.layers.Dense(units=output_size, activation='softmax'))
     return keras.models.Model(inputs=inputs, outputs=outputs)
+
 
 def get_MCDCNN(input_size, output_size):
     return keras.Sequential([
