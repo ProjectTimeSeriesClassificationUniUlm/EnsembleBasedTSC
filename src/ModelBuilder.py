@@ -166,10 +166,12 @@ def get_Encoder(input_size, output_size):
 
 def get_MCDCNN(input_size, output_size):
     return keras.Sequential([
-        keras.layers.Conv1D(filters=8, kernel_size=5, activation='sigmoid', input_shape=(input_size, 1)),
+        keras.layers.Input((input_size, 1)),
+
+        keras.layers.Conv1D(filters=8, kernel_size=5, activation='sigmoid', input_shape=(input_size, 1), padding='same'),
         keras.layers.MaxPool1D(pool_size=2),
 
-        keras.layers.Conv1D(filters=4, kernel_size=5, activation='sigmoid'),
+        keras.layers.Conv1D(filters=4, kernel_size=5, activation='sigmoid', padding='same'),
         keras.layers.MaxPool1D(pool_size=2),
 
         keras.layers.Flatten(),
@@ -181,10 +183,10 @@ def get_MCDCNN(input_size, output_size):
 
 def get_Time_CNN(input_size, output_size):
     return keras.Sequential([
-        keras.layers.Conv1D(filters=6, kernel_size=7, activation='sigmoid', input_shape=(input_size, 1)),
+        keras.layers.Conv1D(filters=6, kernel_size=7, activation='sigmoid', input_shape=(input_size, 1), padding='same'),
         keras.layers.AveragePooling1D(pool_size=3),
 
-        keras.layers.Conv1D(filters=12, kernel_size=7, activation='sigmoid'),
+        keras.layers.Conv1D(filters=12, kernel_size=7, activation='sigmoid', padding='same'),
         keras.layers.AveragePooling1D(pool_size=3),
 
         keras.layers.Flatten(),
