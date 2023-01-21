@@ -5,13 +5,13 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 
 ## TODO:
 - [ ] Confusion Matrix -> Tim
-- [ ] Tim: MCDCNN, Time-CNN -> Tim
-- [ ] Felix: ResNet, FCN -> Felix
-- [ ] Tanja: MLP, Encoder -> Tanja
+- [x] Tim: MCDCNN, Time-CNN -> Tim
+- [x] Felix: ResNet, FCN -> Felix
+- [x] Tanja: MLP, Encoder -> Tanja
 - [ ] Ensembles evaluieren -> Felix
-- [ ] Datensätze verteilen an alle -> Tanja
+- [x] Datensätze verteilen an alle -> Tanja
 - [ ] Notebook das **ein** Modell trainiert und evaluiert -> Tanja
-- [ ] Herausfinden, warum Training der Netze teilweise nicht funktioniert -> Alle
+- [x] Herausfinden, warum Training der Netze teilweise nicht funktioniert -> Alle
 
 - [ ] Zukünftig: RNN, LSTM -> Tim
 - [ ] Zukünftig: Perturbation of Datasets?
