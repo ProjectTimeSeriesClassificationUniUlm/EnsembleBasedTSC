@@ -1,0 +1,31 @@
+Task is to classify the nature of the heartbeat signal.
+
+The multivariate version of this dataset is Labbeled as Heartbeat.
+
+Heart sound recordings were sourced from several contributors around the world, collected at either a clinical or nonclinical environment, from both healthy subjects and pathological patients.
+Each series represent the aplitude of the singal over time.
+
+Heart sound recordings were sourced from several contributors around the world, collected at either a clinical or nonclinical environment, from both healthy subjects and pathological patients.
+The heart sound recordings were collected from different locations on the body. The typical four locations are aortic area, pulmonic area, tricuspid area and mitral area, but could be one of nine different locations.
+The sounds were divided into two classes: normal and abnormal. The normal recordings were from healthy subjects and the abnormal ones were from patients with a confirmed cardiac diagnosis.
+The patients suffer from a variety of illnesses, but typically they are heart valve defects and coronary artery disease patients.
+Heart valve defects include mitral valve prolapse, mitral regurgitation, aortic stenosis and valvular surgery. All the recordings from the patients were generally labeled as abnormal.
+Both healthy subjects and pathological patients include both children and adults.
+
+Data was recorded at 2,000Hz.
+Data was truncated to the shortest instance.
+
+Original data can be found here:
+https://www.physionet.org/physiobank/database/challenge/2016/
+
+Original paper:
+Goldberger AL, Amaral LA, Glass L, Hausdorff JM, Ivanov PC, Mark RG, Mietus JE, Moody GB, Peng CK, Stanley HE. PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. circulation. 2000 Jun 13;101(23):e215-20.
+
+Correspondence should be addressed to Ary L. Goldberger:
+ary@astro.bidmc.harvard.edu
+
+Instances: 409 Time series length: 18,530
+
+Classes: 0. Normal (110) 1 Abnormal (299)
+
+default train test split created through a random partition.
