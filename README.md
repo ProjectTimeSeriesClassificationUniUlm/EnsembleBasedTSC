@@ -4,7 +4,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 
 
 ## TODO:
-- [ ] Simplify Notebooks by creating functions that are used by everyone -> Felix
+- [X] Simplify Notebooks by creating functions that are used by everyone -> Felix
 - [ ] Use glorot initialization for the weights (see https://keras.io/api/layers/initializers/) -> Alle
 - [ ] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
 - [ ] Ensembles evaluieren -> Felix

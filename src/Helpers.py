@@ -3,7 +3,7 @@ import csv
 import keras
 import numpy as np
 from sklearn.metrics import confusion_matrix
-
+from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -53,3 +53,7 @@ def visualize_confusion_matrix(confusion_matrix_: np.ndarray, model_name: str, d
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.show()
+
+
+def get_project_root() -> Path:
+    return Path(__file__).parent.parent

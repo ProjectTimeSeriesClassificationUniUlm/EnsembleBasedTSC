@@ -4,6 +4,10 @@ from tensorflow import keras
 from toolz.functoolz import thread_first
 
 
+def get_model_name(model_builder):
+    return model_builder.__name__.replace('get_', '')
+
+
 def get_MLP(input_size, output_size):
     """
     Create a simple MLP model based on
@@ -170,7 +174,8 @@ def get_MCDCNN(input_size, output_size):
     return keras.Sequential([
         keras.layers.Input((input_size, 1)),
 
-        keras.layers.Conv1D(filters=8, kernel_size=5, activation='sigmoid', input_shape=(input_size, 1), padding='same'),
+        keras.layers.Conv1D(filters=8, kernel_size=5, activation='sigmoid', input_shape=(input_size, 1),
+                            padding='same'),
         keras.layers.MaxPool1D(pool_size=2),
 
         keras.layers.Conv1D(filters=4, kernel_size=5, activation='sigmoid', padding='same'),
@@ -185,7 +190,8 @@ def get_MCDCNN(input_size, output_size):
 
 def get_Time_CNN(input_size, output_size):
     return keras.Sequential([
-        keras.layers.Conv1D(filters=6, kernel_size=7, activation='sigmoid', input_shape=(input_size, 1), padding='same'),
+        keras.layers.Conv1D(filters=6, kernel_size=7, activation='sigmoid', input_shape=(input_size, 1),
+                            padding='same'),
         keras.layers.AveragePooling1D(pool_size=3),
 
         keras.layers.Conv1D(filters=12, kernel_size=7, activation='sigmoid', padding='same'),
