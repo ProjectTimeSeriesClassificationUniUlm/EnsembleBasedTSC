@@ -1,0 +1,1 @@
+sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 create_confusion_matrices.sh
