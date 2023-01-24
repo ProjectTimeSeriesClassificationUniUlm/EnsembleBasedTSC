@@ -81,6 +81,6 @@ def train(model_builders: List[Callable],
                 append_to_csv(result_csv_path, row)
                 # save model
                 model_ds_path = model_path + "/" + ds_name
-                Path(model_ds_path).mkdir(exist_ok=True)
+                Path(model_ds_path).mkdir(exist_ok=True, parents=True)
                 model.save(model_ds_path + "/" + model_name + ".h5")
     return pd.read_csv(result_csv_path)
