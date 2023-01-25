@@ -5,7 +5,7 @@ import warnings
 from enum import Enum
 
 
-class CurrentDatasets(Enum):
+class CurrentDatasets(str, Enum):
     abnormal_heartbeat = "abnormal_heartbeat"
     arrow_head = "arrow_head"
     coffee_beans = "coffee_beans"
