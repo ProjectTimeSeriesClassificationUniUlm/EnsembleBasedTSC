@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 def plot_model_history(history, epochs=None, path_to_persist=None):
     if epochs is None:
         print("No epochs specified, using all epochs.")
-        epochs = history['loss']
+        epochs = len(history['loss'])
 
     else:
         print(f"Using {epochs} epochs. You can ignore the epochs parameter if you want to use all epochs.")
