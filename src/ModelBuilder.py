@@ -40,15 +40,15 @@ def get_FCN(input_size, output_size):
     """
     # How is the number of classes defined???
     return keras.Sequential([
-        keras.layers.Conv1D(filters=128, kernel_size=8, input_shape=(input_size, 1)),
+        keras.layers.Conv1D(filters=128, kernel_size=8, input_shape=(input_size, 1), padding='same'),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 
-        keras.layers.Conv1D(filters=256, kernel_size=5),
+        keras.layers.Conv1D(filters=256, kernel_size=5, padding='same'),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 
-        keras.layers.Conv1D(filters=128, kernel_size=3),
+        keras.layers.Conv1D(filters=128, kernel_size=3, padding='same'),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 
