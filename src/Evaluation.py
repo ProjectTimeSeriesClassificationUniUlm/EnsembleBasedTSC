@@ -3,7 +3,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def plot_model_history(history, epochs, path_to_persist=None):
+def plot_model_history(history, epochs=None, path_to_persist=None):
+    if epochs is None:
+        print("No epochs specified, using all epochs.")
+        epochs = history['loss']
+
+    else:
+        print(f"Using {epochs} epochs. You can ignore the epochs parameter if you want to use all epochs.")
+
     loss = history['loss']
     val_loss = history['val_loss']
 
