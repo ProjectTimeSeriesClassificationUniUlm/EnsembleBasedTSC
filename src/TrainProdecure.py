@@ -3,6 +3,8 @@ import json
 from functools import reduce
 from pathlib import Path
 from typing import List, Callable
+
+import keras.optimizers
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -14,15 +16,23 @@ from LoadData import get_all_datasets_test_train_np_arrays
 from ModelBuilder import get_model_name
 
 
-
 def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray,
-                          y_test: np.ndarray, epochs: int, batch_size: int = 25, validation_split: float = 0.1):
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
+                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int|None = 25,
+                       validation_split: float = 0.1, model_name: str = 'Unnamed model',
+                       dataset_name: str = 'Unnamed dataset'):
+    if learning_rate:
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
+                      loss='sparse_categorical_crossentropy',
+                      metrics=['accuracy'])
+
+    else:
+        model.compile(optimizer='adam',
+                      loss='sparse_categorical_crossentropy',
+                      metrics=['accuracy'])
+
     history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
                         validation_split=validation_split,
-                        callbacks=[TqdmCallback(verbose=0, desc=model.name)], verbose=0)
+                        callbacks=[TqdmCallback(verbose=0, desc=f'Training {model_name} on {dataset_name} dataset')], verbose=0)
     test_loss, test_acc = model.evaluate(x_test, y_test)
 
     return model, test_loss, test_acc, history
