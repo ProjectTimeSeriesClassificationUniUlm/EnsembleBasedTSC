@@ -19,14 +19,14 @@ from ModelBuilder import get_model_name
 def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray,
                        y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int|None = 25,
                        validation_split: float = 0.1, model_name: str = 'Unnamed model',
-                       dataset_name: str = 'Unnamed dataset'):
+                       dataset_name: str = 'Unnamed dataset', optimizer=keras.optimizers.Adam):
     if learning_rate:
-        model.compile(optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
+        model.compile(optimizer=optimizer(learning_rate=learning_rate),
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
 
     else:
-        model.compile(optimizer='adam',
+        model.compile(optimizer=optimizer(),
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
 
@@ -42,7 +42,9 @@ def train(model_builders: List[Callable],
           datasets=get_all_datasets_test_train_np_arrays("../datasets"),
           epochs=30,
           batch_size=10,
-          validation_split=0.2):
+          validation_split=0.2,
+          optimizer=keras.optimizers.Adam,
+          learning_rate=None):
     """
     Trains given models on given datasets
     :param model_builders: list of untrained models
@@ -50,6 +52,9 @@ def train(model_builders: List[Callable],
     :param epochs
     :param batch_size
     :param validation_split
+    :param optimizer:
+    :param learning_rate:
+    :return: pandas dataframe with results
     """
 
     # csv creation
@@ -88,9 +93,16 @@ def train(model_builders: List[Callable],
                 model_name = get_model_name(get_model)
                 print("Model name: ", model_name)
                 model = get_model(input_size, output_size)
-                model.compile(optimizer='adam',
-                              loss='sparse_categorical_crossentropy',
-                              metrics=['accuracy'])
+
+                if learning_rate:
+                    model.compile(optimizer=optimizer(learning_rate=learning_rate),
+                                  loss='sparse_categorical_crossentropy',
+                                  metrics=['accuracy'])
+                else:
+                    model.compile(optimizer=optimizer(),
+                                  loss='sparse_categorical_crossentropy',
+                                  metrics=['accuracy'])
+
                 history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
                                     validation_split=validation_split,
                                     callbacks=[TqdmCallback(verbose=0, desc=model_name)], verbose=0)
