@@ -11,6 +11,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 - [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
 - [ ] MCDCNN und Time-CNN verbessern/tunen/linearisieren/batch norm -> Tim
 - [ ] Vergleich SGD vs Adam -> Tanja
+- [ ] Confidence der Vorhersagen als Confidence der Ensembles -> ???
 - [x] Confusion Matrix -> Tim
 - [x] Tim: MCDCNN, Time-CNN -> Tim
 - [x] Felix: ResNet, FCN -> Felix
