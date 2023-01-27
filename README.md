@@ -6,9 +6,9 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 ## TODO:
 - [X] Simplify Notebooks by creating functions that are used by everyone -> Felix
 - [ ] Use glorot initialization for the weights (see https://keras.io/api/layers/initializers/) -> Alle
-- [ ] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
+- [-] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
 - [ ] Ensembles evaluieren -> Felix
-- [ ] Transfer Learning für FCN -> Tim
+- [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
 - [x] Confusion Matrix -> Tim
 - [x] Tim: MCDCNN, Time-CNN -> Tim
 - [x] Felix: ResNet, FCN -> Felix
