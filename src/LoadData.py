@@ -4,19 +4,48 @@ import os
 import warnings
 from enum import Enum
 
-
+# Datasets work for "MLP", "FCN", "Encoder", "Resnet" models
 class CurrentDatasets(Enum):
-    abnormal_heartbeat = "abnormal_heartbeat"
-    arrow_head = "arrow_head"
-    coffee_beans = "coffee_beans"
     cricket_y = "cricket_y"
-    distal_phalanx_outline = "distal_phalanx_outline"
+    distal_phalanax_tw = "distal_phalanax_tw"
+    egg_five_days = "egg_five_days"
     electric_devices = "electric_devices"
-    freezers = "freezers"
-    phalanges_outlines_correct = "phalanges_outlines_correct"
-    share_price_increase = "share_price_increase"
+    face_ucr = "face_ucr"
+    fifty_words = "fifty_words"
+    mote_strain = "mote_strain"
+    power_cons = "power_cons"
+    share_price_increase = "sony_robot"
     swedish_leaf = "swedish_leaf"
-    wafer = "wafer"
+    wafer = "synthetic_control"
+
+DATASETS_MLP = ['cbf' 'car' 'distal_phalanax_tw' 'swedish_leaf' 'electric_devices'
+ 'fifty_words' 'freezers' 'synthetic_control' 'trace' 'fish' 'lightning_7'
+ 'cricket_y' 'coffee_beans' 'bme' 'plane' 'power_cons' 'face_ucr'
+ 'medical_images' 'arrow_head' 'sony_robot' 'mote_strain' 'egg_five_days']
+
+DATASETS_MCDCNN = ['electric_devices' 'freezers' 'sony_robot']
+
+DATASETS_TIME_CNN = ['electric_devices' 'mote_strain' 'egg_five_days']
+
+DATASETS_FCN = ['cbf' 'gun_point_male_female' 'distal_phalanax_tw' 'swedish_leaf'
+ 'distal_phalanx_outline' 'strawberry' 'electric_devices' 'fifty_words'
+ 'synthetic_control' 'cricket_y' 'gun_point_old_young' 'power_cons'
+ 'face_ucr' 'sony_robot' 'mote_strain' 'egg_five_days'
+ 'large_kitchen_appliances']
+
+DATASETS_ENCODER = ['cbf' 'gun_point_male_female' 'car' 'distal_phalanax_tw'
+ 'phalanges_outlines_correct' 'swedish_leaf' 'distal_phalanx_outline'
+ 'strawberry' 'electric_devices' 'fifty_words' 'freezers'
+ 'synthetic_control' 'gun_point_age_span' 'trace' 'fish' 'lightning_7'
+ 'cricket_y' 'coffee_beans' 'gun_point_old_young' 'middle_phalanx_correct'
+ 'bme' 'plane' 'power_cons' 'face_ucr' 'medical_images' 'arrow_head'
+ 'sony_robot' 'mote_strain' 'egg_five_days']
+
+DATASETS_RESNET = ['gun_point_male_female' 'distal_phalanax_tw' 'swedish_leaf'
+ 'distal_phalanx_outline' 'strawberry' 'electric_devices' 'fifty_words'
+ 'synthetic_control' 'cricket_y' 'gun_point_old_young'
+ 'middle_phalanx_correct' 'power_cons' 'face_ucr' 'medical_images'
+ 'sony_robot' 'mote_strain' 'egg_five_days' 'large_kitchen_appliances']
 
 
 def load_numpy_array_from_ts(path_to_file):
@@ -46,8 +75,8 @@ def get_all_datasets_info(path_to_datasets):
                 test_file = os.path.join(ds_path, file_name)
             if "TRAIN" in file_name:
                 train_file = os.path.join(ds_path, file_name)
-
-        datasets_test_path_train_path[datasets_names[i]] = (test_file, train_file)
+        if test_file and train_file:
+            datasets_test_path_train_path[datasets_names[i]] = (test_file, train_file)
     return datasets_test_path_train_path
 
 
