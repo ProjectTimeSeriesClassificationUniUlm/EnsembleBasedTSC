@@ -5,7 +5,7 @@ import warnings
 from enum import Enum
 
 # Datasets work for "MLP", "FCN", "Encoder", "Resnet" models
-class CurrentDatasets(Enum):
+class CurrentDatasets(str, Enum):
     cricket_y = "cricket_y"
     distal_phalanax_tw = "distal_phalanax_tw"
     egg_five_days = "egg_five_days"

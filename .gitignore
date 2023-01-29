@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# PyCharm project settings
+.idea/
+
+# Trained Models
+models/
