@@ -61,6 +61,14 @@ def visualize_confusion_matrix(confusion_matrix_: np.ndarray, model_name: str, d
 
 
 def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=False):
+    """
+    Save the confusion matrices from given csv as a heatmap using seaborn and matplotlib as pdf.
+    Model Name and Dataset Name are used for the title of the plot.
+
+    :param csv_path: The csv file containing training data
+    :param pdf_path: The pdf file name containing confusion matrices. Gets automatically generated from the csv_path
+    :param verbose: plotting can take some time, prints current dataset name to stdout.
+    """
     if pdf_path is None:
         pdf_path = csv_path.removesuffix('.csv') + '.pdf'
     results_dataframe = pd.read_csv(csv_path)
