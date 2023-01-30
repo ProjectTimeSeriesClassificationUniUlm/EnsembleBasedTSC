@@ -17,8 +17,8 @@ from LoadData import get_all_datasets_test_train_np_arrays
 from ModelBuilder import get_model_name
 
 
-def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray,
-                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int | None = 25,
+def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray = None,
+                       y_test: np.ndarray = None, epochs: int = 20, learning_rate=None, batch_size: int | None = 25,
                        validation_split: float = 0.1, model_name: str = 'Unnamed model',
                        dataset_name: str = 'Unnamed dataset', optimizer=keras.optimizers.Adam):
     if learning_rate:
@@ -35,9 +35,13 @@ def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.n
                         validation_split=validation_split,
                         callbacks=[TqdmCallback(verbose=0, desc=f'Training {model_name} on {dataset_name} dataset')],
                         verbose=0)
-    test_loss, test_acc = model.evaluate(x_test, y_test)
 
-    return model, test_loss, test_acc, history
+    if x_test and y_test:
+        test_loss, test_acc = model.evaluate(x_test, y_test)
+
+        return model, test_loss, test_acc, history
+
+    return model, history
 
 
 def train(model_builders: List[Callable],

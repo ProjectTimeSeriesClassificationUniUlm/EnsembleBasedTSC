@@ -8,7 +8,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 - [X] Use glorot initialization for the weights (see https://keras.io/api/layers/initializers/) -> Felix
 - [-] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
 - [ ] Ensembles evaluieren -> Felix
-- [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
+- [-] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
 - [ ] MCDCNN und Time-CNN verbessern/tunen/linearisieren/batch norm -> Tim
 - [ ] Vergleich SGD vs Adam -> Tanja
 - [ ] Confidence der Vorhersagen als Confidence der Ensembles -> ???
