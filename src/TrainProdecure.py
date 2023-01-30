@@ -1,13 +1,14 @@
-import sys
 import json
 from functools import reduce
 from pathlib import Path
+
 from typing import List, Callable
 
 import keras.optimizers
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+
 from tqdm.auto import tqdm
 from tqdm.keras import TqdmCallback
 
@@ -17,7 +18,7 @@ from ModelBuilder import get_model_name
 
 
 def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray,
-                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int|None = 25,
+                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int | None = 25,
                        validation_split: float = 0.1, model_name: str = 'Unnamed model',
                        dataset_name: str = 'Unnamed dataset', optimizer=keras.optimizers.Adam):
     if learning_rate:
@@ -32,7 +33,8 @@ def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.n
 
     history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
                         validation_split=validation_split,
-                        callbacks=[TqdmCallback(verbose=0, desc=f'Training {model_name} on {dataset_name} dataset')], verbose=0)
+                        callbacks=[TqdmCallback(verbose=0, desc=f'Training {model_name} on {dataset_name} dataset')],
+                        verbose=0)
     test_loss, test_acc = model.evaluate(x_test, y_test)
 
     return model, test_loss, test_acc, history
