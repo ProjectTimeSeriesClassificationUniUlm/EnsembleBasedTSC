@@ -43,6 +43,7 @@ def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.n
 
     return model, history
 
+
 def get_csv_name(used_model_names, num_datasets):
     """
     Returns a csv file name based on models and datasets
@@ -51,11 +52,14 @@ def get_csv_name(used_model_names, num_datasets):
     :param num_datasets: number of used datasets
     :return: csv file name
     """
+
     def model_list_to_str(models: List[Callable]):
         return reduce(lambda result, m: result + '_' + m, models, "")
+
     return ''.join([str(get_project_root() / "results"), "/train_",
                     model_list_to_str(used_model_names), "_",
                     str(num_datasets), "_datasets.csv"])
+
 
 def train(model_builders: List[Callable],
           datasets=get_all_datasets_test_train_np_arrays("../datasets"),
