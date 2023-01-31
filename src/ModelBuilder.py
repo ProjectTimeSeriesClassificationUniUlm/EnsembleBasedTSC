@@ -38,9 +38,8 @@ def get_FCN(input_size, output_size):
     :param output_size: number of classes
     :return: keras sequential model of the FCN
     """
-    # How is the number of classes defined???
     return keras.Sequential([
-        keras.layers.Conv1D(filters=128, kernel_size=8, padding='same', kernel_initializer=tf.keras.initializers.GlorotUniform()),
+        keras.layers.Conv1D(filters=128, kernel_size=8, padding='same', input_shape=(input_size, 1), kernel_initializer=tf.keras.initializers.GlorotUniform()),
         keras.layers.BatchNormalization(),
         keras.layers.Activation('relu'),
 

@@ -60,7 +60,7 @@ def get_time_cnn_datasets_test_train_np_arrays(path_to_datasets):
     return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_TIME_CNN)
 
 
-def get_time_fcn_datasets_test_train_np_arrays(path_to_datasets):
+def get_fcn_datasets_test_train_np_arrays(path_to_datasets):
     return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_FCN)
 
 

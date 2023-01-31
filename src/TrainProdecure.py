@@ -15,10 +15,11 @@ from tqdm.keras import TqdmCallback
 from Helpers import append_to_csv, get_project_root, get_confusion_matrix_for_model_and_data
 from LoadData import get_all_datasets_test_train_np_arrays
 from ModelBuilder import get_model_name
+from PreprocessData import preprocess_datasets
 
 
 def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray = None,
-                       y_test: np.ndarray = None, epochs: int = 20, learning_rate=None, batch_size: int | None = 25,
+                       y_test: np.ndarray = None, epochs: int = 20, learning_rate=None, batch_size: int or None = 25,
                        validation_split: float = 0.1, model_name: str = 'Unnamed model',
                        dataset_name: str = 'Unnamed dataset', optimizer=keras.optimizers.Adam):
     if learning_rate:
@@ -82,7 +83,8 @@ def train(model_builders: List[Callable],
     """
     if datasets is None:
         datasets = get_all_datasets_test_train_np_arrays("../datasets")
-
+        datasets = preprocess_datasets(datasets, batch_size=batch_size)
+            
     # csv creation
     def model_list_to_str(models: List[Callable]):
         return reduce(lambda result, m: result + '_' + get_model_name(m), models, "")
@@ -108,10 +110,9 @@ def train(model_builders: List[Callable],
         for ds_name, ds_data in tqdm(datasets.items(), unit='dataset'):
             print("Dataset name: ", ds_name)
             x_test, y_test = ds_data["test_data"]
-            x_train, y_train = ds_data["train_data"]
 
-            input_size = x_train.shape[1]
-            output_size = len(np.unique(y_train))
+            input_size = ds_data["input_size"]
+            output_size = ds_data["output_size"]
 
             # and every model
             for get_model in tqdm(model_builders, unit='model', desc=f'Train on "{ds_name}"'):
@@ -128,8 +129,7 @@ def train(model_builders: List[Callable],
                                   loss='sparse_categorical_crossentropy',
                                   metrics=['accuracy'])
 
-                history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
-                                    validation_split=validation_split,
+                history = model.fit(ds_data["train_data"], epochs=epochs,# batch_size=batch_size, 
                                     callbacks=[TqdmCallback(verbose=0, desc=model_name)], verbose=0)
                 test_loss, test_acc = model.evaluate(x_test, y_test)
                 # save csv
