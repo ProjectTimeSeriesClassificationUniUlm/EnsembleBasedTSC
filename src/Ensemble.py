@@ -1,6 +1,8 @@
 from enum import Enum
 
 import tensorflow as tf
+from scipy.stats import stats
+from toolz import thread_first, first
 
 
 class EnsembleMethods(str, Enum):
@@ -37,20 +39,22 @@ class Ensemble(tf.keras.Model):
         return self.__ensemble_method__(x)
 
     def get_all_predictions(self, x):
-        return tf.stack([model(x)[0] for model in self.models])
+        return tf.stack([model.predict(x) for model in self.models])
+
+    def get_all_votes(self, x):
+        return tf.stack([model.predict(x).argmax(axis=-1) for model in self.models])
 
     def __average__(self, x):
         pred = self.get_all_predictions(x)
-        return tf.math.reduce_mean(pred, axis=0)
+        return tf.argmax(tf.math.reduce_mean(pred, axis=0), axis=-1)
 
     def __logistic_average__(self, x):
         pred = self.get_all_predictions(x)
-        return tf.math.reduce_mean(tf.math.sigmoid(pred), axis=0)
+        return tf.argmax(tf.math.reduce_mean(tf.math.sigmoid(pred), axis=0),axis=-1)
 
     def __majority_vote__(self, x):
-        pred = self.get_all_predictions(x)
-        argmax = tf.math.argmax(pred, axis=1)
-        counts = tf.unique_with_counts(argmax)
-        shape = tf.cast(pred[0].shape, dtype='int64')
-        idx = tf.reshape(counts.y, (-1, 1))
-        return tf.scatter_nd(idx, updates=counts.count, shape=shape)
+        return thread_first(self.get_all_votes(x),
+                            tf.stack,
+                            (stats.mode, 0, 'raise', True),
+                            first,
+                            first)

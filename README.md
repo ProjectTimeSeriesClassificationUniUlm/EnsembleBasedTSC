@@ -10,7 +10,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 - [ ] Ensembles evaluieren -> Felix (3 confusion matrices erstellen + test acc)
 - [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
 - [ ] MCDCNN und Time-CNN verbessern/tunen/linearisieren/batch norm -> Tim
-- [x] Vergleich SGD vs Adam -> Tanja --> adam optimizer
+- [x] Vergleich SGD vs Adam -> Tanja --> result: adam optimizer
 - [ ] Confidence der Vorhersagen als Confidence der Ensembles -> Tanja
 - [ ] Funktionen für get Datensätze -> Tanja
 - [ ] Datensatz mit Rauschen vergrößern -> Tanja

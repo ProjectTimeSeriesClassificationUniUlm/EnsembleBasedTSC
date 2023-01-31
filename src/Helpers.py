@@ -72,7 +72,8 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
     if pdf_path is None:
         pdf_path = csv_path.removesuffix('.csv') + '.pdf'
     results_dataframe = pd.read_csv(csv_path)
-    confusion_matrices = results_dataframe[['dataset_name', 'model_name', 'confusion_matrix']].values.tolist()
+    confusion_matrices = results_dataframe[
+        ['dataset_name', 'model_name', 'confusion_matrix', 'test_acc']].values.tolist()
     datasets = groupby(lambda x: x[0], confusion_matrices)  # create a dict with dataset as key, and matrices as values
 
     ncols = max(*valmap(len, datasets).values())
@@ -85,13 +86,13 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
             print(dataset_name)
         fig, axs = plt.subplots(nrows=1, ncols=ncols, sharex=True, sharey=True, figsize=(ncols * 10, 10))
         col = 0
-        for (_, model_name, confusion_matrix) in data:
+        for (_, model_name, confusion_matrix, test_acc) in data:
             sns.heatmap(json.loads(confusion_matrix), annot=True, fmt="d", ax=axs[col])
-            axs[col].set_title(f"{model_name} on {dataset_name}", fontsize=28)
+            axs[col].set_title(f"{model_name} on {dataset_name}\naccuracy: {round(test_acc,3)}", fontsize=28)
             axs[col].set_ylabel('True label', fontsize=24)
             axs[col].set_xlabel('Predicted label', fontsize=24)
             col = col + 1
-        pdf_buffer = io.BytesIO() # save intermediate pdf in-memory
+        pdf_buffer = io.BytesIO()  # save intermediate pdf in-memory
         plt.savefig(pdf_buffer, format='pdf')
         plt.close()
         merger.append(pdf_buffer)
