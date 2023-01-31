@@ -7,11 +7,13 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 - [X] Simplify Notebooks by creating functions that are used by everyone -> Felix
 - [X] Use glorot initialization for the weights (see https://keras.io/api/layers/initializers/) -> Felix
 - [-] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
-- [ ] Ensembles evaluieren -> Felix
+- [ ] Ensembles evaluieren -> Felix (3 confusion matrices erstellen + test acc)
 - [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
 - [ ] MCDCNN und Time-CNN verbessern/tunen/linearisieren/batch norm -> Tim
-- [ ] Vergleich SGD vs Adam -> Tanja
-- [ ] Confidence der Vorhersagen als Confidence der Ensembles -> ???
+- [x] Vergleich SGD vs Adam -> Tanja --> adam optimizer
+- [ ] Confidence der Vorhersagen als Confidence der Ensembles -> Tanja
+- [ ] Funktionen für get Datensätze -> Tanja
+- [ ] Datensatz mit Rauschen vergrößern -> Tanja
 - [x] Confusion Matrix -> Tim
 - [x] Tim: MCDCNN, Time-CNN -> Tim
 - [x] Felix: ResNet, FCN -> Felix
@@ -22,7 +24,8 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 
 - [ ] Zukünftig: RNN, LSTM -> Tim
 - [ ] LSTM,RNN für Transfer Learning? -> Tim
-- [ ] Zukünftig: Perturbation of Datasets? -> Tanja
+- [ ] Zukünftig: Normalize data?
+- [x] Zukünftig: Perturbation of Datasets? -> Tanja
 - [ ] Zukünftig: float16 statt float32? Performance Vergleich?
 - [ ] Zukünftig: Vorverarbeiten der Daten (z.B. Fourier Transformation)
 

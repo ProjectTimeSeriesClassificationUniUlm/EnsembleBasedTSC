@@ -18,7 +18,7 @@ from ModelBuilder import get_model_name
 
 
 def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray,
-                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int | None = 25,
+                       y_test: np.ndarray, epochs: int, learning_rate=None, batch_size: int or None = 25,
                        validation_split: float = 0.1, model_name: str = 'Unnamed model',
                        dataset_name: str = 'Unnamed dataset', optimizer=keras.optimizers.Adam):
     if learning_rate:
@@ -41,12 +41,13 @@ def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.n
 
 
 def train(model_builders: List[Callable],
-          datasets=get_all_datasets_test_train_np_arrays("../datasets"),
+          datasets=None,
           epochs=30,
           batch_size=10,
           validation_split=0.2,
           optimizer=keras.optimizers.Adam,
-          learning_rate=None):
+          learning_rate=None, 
+          result_csv_path=None):
     """
     Trains given models on given datasets
     :param model_builders: list of untrained models
@@ -58,14 +59,17 @@ def train(model_builders: List[Callable],
     :param learning_rate:
     :return: pandas dataframe with results
     """
-
+    if datasets is None:
+        datasets = get_all_datasets_test_train_np_arrays("../datasets")
+    
     # csv creation
     def model_list_to_str(models: List[Callable]):
         return reduce(lambda result, m: result + '_' + get_model_name(m), models, "")
 
-    result_csv_path = ''.join([str(get_project_root() / "results"), "/train_",
-                               model_list_to_str(model_builders), "_",
-                               str(len(datasets)), "_datasets.csv"])
+    if result_csv_path is None:
+        result_csv_path = ''.join([str(get_project_root() / "results"), "/train_",
+                                   model_list_to_str(model_builders), "_",
+                                   str(len(datasets)), "_datasets.csv"])
     if not (csv_path := Path(result_csv_path)).exists():
         csv_path.touch()
     if len(csv_path.read_text()) == 0:

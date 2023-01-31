@@ -18,34 +18,34 @@ class CurrentDatasets(str, Enum):
     swedish_leaf = "swedish_leaf"
     wafer = "synthetic_control"
 
-DATASETS_MLP = ['cbf' 'car' 'distal_phalanax_tw' 'swedish_leaf' 'electric_devices'
- 'fifty_words' 'freezers' 'synthetic_control' 'trace' 'fish' 'lightning_7'
- 'cricket_y' 'coffee_beans' 'bme' 'plane' 'power_cons' 'face_ucr'
- 'medical_images' 'arrow_head' 'sony_robot' 'mote_strain' 'egg_five_days']
+DATASETS_MLP = ['cbf', 'car', 'distal_phalanax_tw', 'swedish_leaf', 'electric_devices',
+ 'fifty_words', 'freezers', 'synthetic_control', 'trace', 'fish', 'lightning_7',
+ 'cricket_y', 'coffee_beans', 'bme', 'plane', 'power_cons', 'face_ucr',
+ 'medical_images', 'arrow_head', 'sony_robot', 'mote_strain', 'egg_five_days']
 
-DATASETS_MCDCNN = ['electric_devices' 'freezers' 'sony_robot']
+DATASETS_MCDCNN = ['electric_devices', 'freezers', 'sony_robot']
 
-DATASETS_TIME_CNN = ['electric_devices' 'mote_strain' 'egg_five_days']
+DATASETS_TIME_CNN = ['electric_devices', 'mote_strain', 'egg_five_days']
 
-DATASETS_FCN = ['cbf' 'gun_point_male_female' 'distal_phalanax_tw' 'swedish_leaf'
- 'distal_phalanx_outline' 'strawberry' 'electric_devices' 'fifty_words'
- 'synthetic_control' 'cricket_y' 'gun_point_old_young' 'power_cons'
- 'face_ucr' 'sony_robot' 'mote_strain' 'egg_five_days'
+DATASETS_FCN = ['cbf', 'gun_point_male_female', 'distal_phalanax_tw', 'swedish_leaf',
+ 'distal_phalanx_outline', 'strawberry', 'electric_devices', 'fifty_words',
+ 'synthetic_control', 'cricket_y', 'gun_point_old_young', 'power_cons',
+ 'face_ucr', 'sony_robot', 'mote_strain', 'egg_five_days',
  'large_kitchen_appliances']
 
-DATASETS_ENCODER = ['cbf' 'gun_point_male_female' 'car' 'distal_phalanax_tw'
- 'phalanges_outlines_correct' 'swedish_leaf' 'distal_phalanx_outline'
- 'strawberry' 'electric_devices' 'fifty_words' 'freezers'
- 'synthetic_control' 'gun_point_age_span' 'trace' 'fish' 'lightning_7'
- 'cricket_y' 'coffee_beans' 'gun_point_old_young' 'middle_phalanx_correct'
- 'bme' 'plane' 'power_cons' 'face_ucr' 'medical_images' 'arrow_head'
- 'sony_robot' 'mote_strain' 'egg_five_days']
+DATASETS_ENCODER = ['cbf', 'gun_point_male_female', 'car', 'distal_phalanax_tw',
+ 'phalanges_outlines_correct', 'swedish_leaf', 'distal_phalanx_outline',
+ 'strawberry', 'electric_devices', 'fifty_words', 'freezers',
+ 'synthetic_control', 'gun_point_age_span', 'trace', 'fish', 'lightning_7',
+ 'cricket_y', 'coffee_beans', 'gun_point_old_young', 'middle_phalanx_correct',
+ 'bme', 'plane', 'power_cons', 'face_ucr', 'medical_images', 'arrow_head',
+ 'sony_robot', 'mote_strain', 'egg_five_days']
 
-DATASETS_RESNET = ['gun_point_male_female' 'distal_phalanax_tw' 'swedish_leaf'
- 'distal_phalanx_outline' 'strawberry' 'electric_devices' 'fifty_words'
- 'synthetic_control' 'cricket_y' 'gun_point_old_young'
- 'middle_phalanx_correct' 'power_cons' 'face_ucr' 'medical_images'
- 'sony_robot' 'mote_strain' 'egg_five_days' 'large_kitchen_appliances']
+DATASETS_RESNET = ['gun_point_male_female', 'distal_phalanax_tw', 'swedish_leaf',
+ 'distal_phalanx_outline', 'strawberry', 'electric_devices', 'fifty_words',
+ 'synthetic_control', 'cricket_y', 'gun_point_old_young',
+ 'middle_phalanx_correct', 'power_cons', 'face_ucr', 'medical_images',
+ 'sony_robot', 'mote_strain', 'egg_five_days', 'large_kitchen_appliances']
 
 
 def load_numpy_array_from_ts(path_to_file):
