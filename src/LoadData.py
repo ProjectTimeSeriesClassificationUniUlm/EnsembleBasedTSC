@@ -63,9 +63,9 @@ def _prepare_train_data(df):
     return np.array(prepared, dtype=np.float64)
 
 
-def get_all_datasets_info(path_to_datasets):
+def get_all_datasets_info(path_to_datasets, ds_names = None):
     datasets_test_path_train_path = dict()
-    datasets_names, datasets_paths = get_all_datasets_names_paths(path_to_datasets)
+    datasets_names, datasets_paths = get_all_datasets_names_paths(path_to_datasets, ds_names)
     for i in range(len(datasets_paths)):
         ds_path = datasets_paths[i]
         test_file = None
@@ -80,19 +80,20 @@ def get_all_datasets_info(path_to_datasets):
     return datasets_test_path_train_path
 
 
-def get_all_datasets_names_paths(path_to_datasets):
+def get_all_datasets_names_paths(path_to_datasets, ds_names = None):
     datasets_names = list()
     datasets_paths = list()
     for name in os.listdir(path_to_datasets):
-        datasets_names.append(name)
-        datasets_paths.append(os.path.join(path_to_datasets, name))
+        if ds_names is None or name in ds_names:
+            datasets_names.append(name)
+            datasets_paths.append(os.path.join(path_to_datasets, name))
     return datasets_names, datasets_paths
 
 
-def get_all_datasets_test_train_np_arrays(path_to_datasets):
+def get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = None):
     datasets_test_train_np_arrays = dict()
 
-    datasets_test_path_train_path = get_all_datasets_info(path_to_datasets)
+    datasets_test_path_train_path = get_all_datasets_info(path_to_datasets, ds_names)
     for ds_name, (test_file, train_file) in datasets_test_path_train_path.items():
         x_test, y_test_raw = load_numpy_array_from_ts(test_file)
         x_train, y_train_raw = load_numpy_array_from_ts(train_file)

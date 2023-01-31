@@ -13,7 +13,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 - [x] Vergleich SGD vs Adam -> Tanja --> result: adam optimizer
 - [ ] Confidence der Vorhersagen als Confidence der Ensembles -> Tanja
 - [ ] Funktionen für get Datensätze -> Tanja
-- [ ] Datensatz mit Rauschen vergrößern -> Tanja
+- [ ] Datensatz mit Rauschen vergrößern, für jeden Sample wird SNR neu gesetzt -> Tanja
 - [x] Confusion Matrix -> Tim
 - [x] Tim: MCDCNN, Time-CNN -> Tim
 - [x] Felix: ResNet, FCN -> Felix
