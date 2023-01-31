@@ -76,12 +76,12 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
         ['dataset_name', 'model_name', 'confusion_matrix', 'test_acc']].values.tolist()
     datasets = groupby(lambda x: x[0], confusion_matrices)  # create a dict with dataset as key, and matrices as values
 
-    ncols = max(*valmap(len, datasets).values())
     # it is way faster to plot each dataset individually and then concat the resulting pdf
     # than letting matplotlib do everything at once
     merger = PdfMerger()
     row = 0
     for dataset_name, data in datasets.items():
+        ncols = len(data)
         if verbose:
             print(dataset_name)
         fig, axs = plt.subplots(nrows=1, ncols=ncols, sharex=True, sharey=True, figsize=(ncols * 10, 10))
