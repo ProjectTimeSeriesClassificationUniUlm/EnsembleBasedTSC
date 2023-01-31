@@ -48,19 +48,46 @@ DATASETS_RESNET = ['gun_point_male_female', 'distal_phalanax_tw', 'swedish_leaf'
  'sony_robot', 'mote_strain', 'egg_five_days', 'large_kitchen_appliances']
 
 
-def load_numpy_array_from_ts(path_to_file):
-    if path_to_file is None:
-        warnings.warn('path_to_file is equal to None')
-        return None
-    x, y = load_from_tsfile_to_dataframe(path_to_file)
-    return _prepare_train_data(x), np.array(y, dtype=np.float64)
+def get_mlp_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_MLP)
 
 
-def _prepare_train_data(df):
-    prepared = list()
-    for j in range(df.size):
-        prepared.append(df.iloc[j].to_numpy()[0].to_numpy())
-    return np.array(prepared, dtype=np.float64)
+def get_mcdcnn_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_MCDCNN)
+
+
+def get_time_cnn_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_TIME_CNN)
+
+
+def get_time_fcn_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_FCN)
+
+
+def get_encoder_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_ENCODER)
+
+
+def get_resnet_datasets_test_train_np_arrays(path_to_datasets):
+    return get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = DATASETS_RESNET)
+
+
+def get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = None):
+    datasets_test_train_np_arrays = dict()
+
+    datasets_test_path_train_path = get_all_datasets_info(path_to_datasets, ds_names)
+    for ds_name, (test_file, train_file) in datasets_test_path_train_path.items():
+        x_test, y_test_raw = load_numpy_array_from_ts(test_file)
+        x_train, y_train_raw = load_numpy_array_from_ts(train_file)
+        lookup_table, y_train = np.unique(y_train_raw, return_inverse=True)
+        lookup_table_dict = dict(zip(lookup_table, list(range(len(lookup_table)))))
+        y_test = np.array(list(map(lambda label: lookup_table_dict[label], y_test_raw)))
+        
+        datasets_test_train_np_arrays[ds_name] = dict()
+        datasets_test_train_np_arrays[ds_name]["test_data"] = x_test, y_test
+        datasets_test_train_np_arrays[ds_name]["train_data"] = x_train, y_train
+
+    return datasets_test_train_np_arrays
 
 
 def get_all_datasets_info(path_to_datasets, ds_names = None):
@@ -90,20 +117,21 @@ def get_all_datasets_names_paths(path_to_datasets, ds_names = None):
     return datasets_names, datasets_paths
 
 
-def get_all_datasets_test_train_np_arrays(path_to_datasets, ds_names = None):
-    datasets_test_train_np_arrays = dict()
+def load_numpy_array_from_ts(path_to_file):
+    if path_to_file is None:
+        warnings.warn('path_to_file is equal to None')
+        return None
+    x, y = load_from_tsfile_to_dataframe(path_to_file)
+    return _prepare_train_data(x), np.array(y, dtype=np.float64)
 
-    datasets_test_path_train_path = get_all_datasets_info(path_to_datasets, ds_names)
-    for ds_name, (test_file, train_file) in datasets_test_path_train_path.items():
-        x_test, y_test_raw = load_numpy_array_from_ts(test_file)
-        x_train, y_train_raw = load_numpy_array_from_ts(train_file)
-        lookup_table, y_train = np.unique(y_train_raw, return_inverse=True)
-        lookup_table_dict = dict(zip(lookup_table, list(range(len(lookup_table)))))
-        y_test = np.array(list(map(lambda label: lookup_table_dict[label], y_test_raw)))
-        
-        datasets_test_train_np_arrays[ds_name] = dict()
-        datasets_test_train_np_arrays[ds_name]["test_data"] = x_test, y_test
-        datasets_test_train_np_arrays[ds_name]["train_data"] = x_train, y_train
 
-    return datasets_test_train_np_arrays
+def _prepare_train_data(df):
+    prepared = list()
+    for j in range(df.size):
+        prepared.append(df.iloc[j].to_numpy()[0].to_numpy())
+    return np.array(prepared, dtype=np.float64)
+
+
+
+
 
