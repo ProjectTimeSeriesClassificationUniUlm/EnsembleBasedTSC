@@ -133,3 +133,7 @@ dmypy.json
 
 # Trained Models
 models/
+
+# Large datasets
+datasets/FruitFlies/
+datasets/RightWhaleCalls/
