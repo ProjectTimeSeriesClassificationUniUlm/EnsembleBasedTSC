@@ -68,7 +68,8 @@ def train(model_builders: List[Callable],
           validation_split=0.2,
           optimizer=keras.optimizers.Adam,
           learning_rate=None, 
-          result_csv_path=None):
+          result_csv_path=None,
+          unique_model_name=False):
     """
     Trains given models on given datasets
 
@@ -79,6 +80,8 @@ def train(model_builders: List[Callable],
     :param validation_split
     :param optimizer:
     :param learning_rate:
+    :param result_csv_path:
+    :param unique_model_name: appends the row index to the model name
     :return: pandas dataframe with results
     """
     if datasets is None:
@@ -115,8 +118,9 @@ def train(model_builders: List[Callable],
             output_size = ds_data["output_size"]
 
             # and every model
+            model_index = 0
             for get_model in tqdm(model_builders, unit='model', desc=f'Train on "{ds_name}"'):
-                model_name = get_model_name(get_model)
+                model_name = get_model_name(get_model) + f"-{model_index}" if unique_model_name else ""
                 print("Model name: ", model_name)
                 model = get_model(input_size, output_size)
 
@@ -144,4 +148,5 @@ def train(model_builders: List[Callable],
                 model_ds_path = model_path + "/" + ds_name
                 Path(model_ds_path).mkdir(exist_ok=True, parents=True)
                 model.save(model_ds_path + "/" + model_name + ".h5")
+                model_index = model_index + 1
     return pd.read_csv(result_csv_path)
