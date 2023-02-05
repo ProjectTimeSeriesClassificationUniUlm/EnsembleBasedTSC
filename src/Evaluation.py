@@ -3,11 +3,16 @@ import os
 from functools import partial
 
 import numpy as np
-import tensorflow_addons # needed for model import, do not remove
+from itertools import combinations
+import tensorflow_addons  # needed for model import, do not remove
 import pandas
+from keras.callbacks import LambdaCallback
 from matplotlib import pyplot as plt
+from numpy import array_equal
 from sklearn.metrics import accuracy_score, confusion_matrix
 from tensorflow import keras
+from toolz import thread_first, thread_last, identity, count, groupby
+
 from Ensemble import EnsembleMethods, Ensemble
 from LoadData import CurrentDatasets, get_all_datasets_test_train_np_arrays
 
@@ -53,7 +58,27 @@ def plot_model_history(history, epochs=None, path_to_persist=None):
         plt.show()
 
 
-def get_ensemble_predictions(x, models):
+def flatten_models(models, weight=1):
+    individual_weight = weight / len(models)
+    grouped_models = groupby(lambda m: isinstance(m, list), models)
+    models = grouped_models.get(False, [])
+    weighted_models = list(zip(models, [individual_weight] * len(models)))
+    model_lists = grouped_models.get(True, [])
+    for model in model_lists:
+        weighted_models = weighted_models + flatten_models(model, weight=individual_weight)
+    return weighted_models
+
+
+def load_models(dataset_name=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], model_path=None):
+    if model_path is None:
+        model_path = f'../models/{dataset_name}'
+    models_to_load = list(
+        filter(lambda model_name: model_name.removesuffix('.h5') in model_names, os.listdir(model_path)))
+    models = list(map(lambda filename: keras.models.load_model(model_path + "/" + filename), models_to_load))
+    return models
+
+
+def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=False):
     """
     Create an ensemble of given models and dataset
 
@@ -61,11 +86,23 @@ def get_ensemble_predictions(x, models):
     :param models: models to be ensembled
     :return: ensemble methods used and class predictions
     """
+    models, weights = list(zip(*flatten_models(models)))
+    print(models)
+    print(weights)
+    models = load_models(evaluation_dataset, models)
     ensemble_methods = [method.value for method in EnsembleMethods]
-    ensembles = list(map(lambda ensemble_type: Ensemble(models=models, ensemble_type=ensemble_type),
+    ensembles = list(map(lambda ensemble_type: Ensemble(models=models, weights=weights, ensemble_type=ensemble_type),
                          ensemble_methods))
-    return ensemble_methods, list(map(lambda ensemble: np.array(ensemble.__ensemble_method__(x)),
-                                      ensembles))
+    predictions = list(map(lambda ensemble: np.array(ensemble.__ensemble_method__(x, verbose=0)),
+                           ensembles))
+    # check for identical predictions
+    if check_identical:
+        identical_predictions_count = thread_last(combinations(predictions, 2),
+                                                  (map, lambda comb: array_equal(comb[0], comb[1])),
+                                                  (filter, identity),
+                                                  count)
+        print(f"{identical_predictions_count} identical predictions found")
+    return ensemble_methods, predictions
 
 
 def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], ensemble_name=None):
@@ -73,7 +110,7 @@ def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_na
     run an ensemble on a given dataset
 
     :param evaluation_dataset: dataset name
-    :param model_names: model names to be ensembled
+    :param model_names: model names to be ensembled, can be a nested list. Nested lists get weighted
     :param ensemble_name
     :return: list of accuracies and confusion matrices
     """
@@ -82,12 +119,8 @@ def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_na
 
     x_test, y_test = get_all_datasets_test_train_np_arrays('../datasets/', [evaluation_dataset])[evaluation_dataset][
         'test_data']
-    model_path = f'../models/{evaluation_dataset}'
-    models_to_load = list(
-        filter(lambda model_name: model_name.removesuffix('.h5') in model_names, os.listdir(model_path)))
-    models = list(map(lambda filename: keras.models.load_model(model_path + "/" + filename), models_to_load))
 
-    method_names, predicted_classes = get_ensemble_predictions(x_test, models)
+    method_names, predicted_classes = get_ensemble_predictions(x_test, model_names, evaluation_dataset)
 
     dataset_names = [evaluation_dataset for _ in method_names]
     display_names = [f"{ensemble_name}-{method_name}" for method_name in method_names]

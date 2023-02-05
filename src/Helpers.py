@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+from operator import concat
 
 import keras
 import numpy as np
@@ -11,6 +12,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 from toolz import groupby, valmap
+from functools import partial, reduce
 
 
 def append_to_csv(csv_path, input_row):
@@ -88,7 +90,7 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
         col = 0
         for (_, model_name, confusion_matrix, test_acc) in data:
             sns.heatmap(json.loads(confusion_matrix), annot=True, fmt="d", ax=axs[col])
-            axs[col].set_title(f"{model_name} on {dataset_name}\naccuracy: {round(test_acc,3)}", fontsize=28)
+            axs[col].set_title(f"{model_name} on {dataset_name}\naccuracy: {round(test_acc, 3)}", fontsize=28)
             axs[col].set_ylabel('True label', fontsize=24)
             axs[col].set_xlabel('Predicted label', fontsize=24)
             col = col + 1
@@ -105,3 +107,22 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
 
 def get_project_root() -> Path:
     return Path(__file__).parent.parent
+
+
+def fold_nested(fn_leaf=lambda x: x, fn_node=sum, tree=[[1, 2], 3, [4, [5]]]):
+    """
+    (pre-order) Folds over a nested list
+
+    :param fn_leaf: The function applied to leaf nodes/values
+    :param fn_node: The function applied to nodes / result lists
+    :param tree: the nested list to fold over
+    :return: folded nested list
+    """
+    if isinstance(tree, list):  # node
+        return fn_node(list(map(partial(fold_nested, fn_leaf, fn_node), tree)))
+    else:  # leaf
+        return fn_leaf(tree)
+
+
+# flattens a list
+flatten_list = partial(fold_nested, lambda x: [x], partial(reduce, concat))

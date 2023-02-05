@@ -120,7 +120,7 @@ def train(model_builders: List[Callable],
             # and every model
             model_index = 0
             for get_model in tqdm(model_builders, unit='model', desc=f'Train on "{ds_name}"'):
-                model_name = get_model_name(get_model) + f"-{model_index}" if unique_model_name else ""
+                model_name = get_model_name(get_model) + (f"-{model_index}" if unique_model_name else "")
                 print("Model name: ", model_name)
                 model = get_model(input_size, output_size)
 
