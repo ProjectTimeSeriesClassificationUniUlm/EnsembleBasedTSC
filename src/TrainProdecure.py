@@ -37,7 +37,7 @@ def train_single_model(model: tf.keras.Model, x_train: np.ndarray, y_train: np.n
                         callbacks=[TqdmCallback(verbose=0, desc=f'Training {model_name} on {dataset_name} dataset')],
                         verbose=0)
 
-    if x_test and y_test:
+    if x_test is not None and y_test is not None:
         test_loss, test_acc = model.evaluate(x_test, y_test)
 
         return model, test_loss, test_acc, history
