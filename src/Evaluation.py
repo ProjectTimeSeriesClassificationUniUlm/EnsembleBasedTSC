@@ -94,8 +94,7 @@ def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=Fals
     :return: ensemble methods used and class predictions
     """
     models, weights = list(zip(*flatten_models(models)))
-    print(models)
-    print(weights)
+    print(np.array(zip(models, weights)))
     models = load_models(evaluation_dataset, models)
     ensemble_methods = [method.value for method in EnsembleMethods]
     ensembles = list(map(lambda ensemble_type: Ensemble(models=models, weights=weights, ensemble_type=ensemble_type),
