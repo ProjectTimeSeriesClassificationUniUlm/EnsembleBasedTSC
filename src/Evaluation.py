@@ -71,11 +71,18 @@ def flatten_models(models, weight=1):
 
 def load_models(dataset_name=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], model_path=None):
     if model_path is None:
-        model_path = f'../models/{dataset_name}'
+        model_path = f'../models/'
+    model_path =  os.path.join(model_path, dataset_name)
     models_to_load = list(
-        filter(lambda model_name: model_name.removesuffix('.h5') in model_names, os.listdir(model_path)))
+        filter(lambda model_name: remove_suffix(model_name,'.h5') in model_names, os.listdir(model_path)))
     models = list(map(lambda filename: keras.models.load_model(model_path + "/" + filename), models_to_load))
     return models
+
+
+def remove_suffix(input_string, suffix):
+    if suffix and input_string.endswith(suffix):
+        return input_string[:-len(suffix)]
+    return input_string
 
 
 def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=False):

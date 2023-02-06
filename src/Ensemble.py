@@ -9,7 +9,9 @@ from toolz import thread_first, first
 
 class EnsembleMethods(str, Enum):
     AVERAGE = "average"
+    AVERAGE_WITH_CONFIDENCE = "average_with_confidence"
     LOGISTIC_AVERAGE = "logistic_average"
+    LOGISTIC_AVERAGE_WITH_CONFIDENCE = "logistic_average_with_confidence"
     MAJORITY_VOTE = "majority_vote"
 
 
@@ -31,16 +33,16 @@ class Ensemble(tf.keras.Model):
         weights = np.multiply(weights, 1.0 / sum(weights))
         self.models = models
         self.model_weights = weights
-        self.__ensemble_method__ = None
-        match ensemble_type:
-            case EnsembleMethods.AVERAGE:
-                self.__ensemble_method__ = self.__average__
-            case EnsembleMethods.LOGISTIC_AVERAGE:
-                self.__ensemble_method__ = self.__logistic_average__
-            case EnsembleMethods.MAJORITY_VOTE:
-                self.__ensemble_method__ = self.__majority_vote__
-            case _:
-                raise ValueError("Invalid ensemble type")
+        ensemble_types = {
+            EnsembleMethods.AVERAGE : self.__average__,
+            EnsembleMethods.LOGISTIC_AVERAGE : self.__logistic_average__,
+            EnsembleMethods.MAJORITY_VOTE : self.__majority_vote__,
+            EnsembleMethods.AVERAGE_WITH_CONFIDENCE : self.__logistic_average_with_confidence__,
+            EnsembleMethods.LOGISTIC_AVERAGE_WITH_CONFIDENCE : self.__average_with_confidence__
+        }
+        self.__ensemble_method__ = ensemble_types.get(ensemble_type, None)
+        if self.__ensemble_method__ is None:
+            raise ValueError("Invalid ensemble type")
 
     def call(self, x, *args, **kwargs):
         return self.__ensemble_method__(x)
@@ -65,3 +67,18 @@ class Ensemble(tf.keras.Model):
                             (weighted_mode, np.transpose(np.array([self.model_weights]*len(x)))),  # axis is 0 by default
                             first,
                             first)
+    
+    def __average_with_confidence__(self, x, verbose="auto")
+        pred = self.get_all_predictions(x, verbose)
+        return tf.argmax(
+                np.apply_along_axis(self.__calculate_column_avg_with_confidence__, 0, pred),
+                axis=-1)
+    
+    def __logistic_average_with_confidence__(self, x, verbose="auto")
+        pred = tf.math.sigmoid(self.get_all_predictions(x, verbose))
+        return tf.argmax(
+                np.apply_along_axis(self.__calculate_column_avg_with_confidence__, 0, pred),
+                axis=-1)
+    
+    def __calculate_column_avg_with_confidence__(pred_column):
+        return np.average(pred_column, axis=0, weights = self.model_weights*pred_column*10)
