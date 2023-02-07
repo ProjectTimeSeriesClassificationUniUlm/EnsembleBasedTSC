@@ -1,61 +1,52 @@
 import json
-import os
-from functools import partial
 
 import io
-import csv
 import numpy as np
 import pandas as pd
-from itertools import combinations
 import tensorflow_addons  # needed for model import, do not remove
 import pandas
-from keras.callbacks import LambdaCallback
 from matplotlib import pyplot as plt
-from numpy import array_equal
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import confusion_matrix
 from tensorflow import keras
-from toolz import thread_first, thread_last, identity, count, groupby, valmap
+from toolz import groupby
 from PyPDF2 import PdfMerger
-from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
-from functools import partial, reduce
 
-from Ensemble import EnsembleMethods, Ensemble
-from LoadData import CurrentDatasets, get_all_datasets_test_train_np_arrays
-from PreprocessData import preprocess_datasets, add_additive_white_gaussian_noise
 from Helpers import remove_suffix
 
 
 def plot_model_history(history, epochs=None, path_to_persist=None):
     if epochs is None:
         print("No epochs specified, using all epochs.")
-        epochs = len(history['loss'])
+        epochs = len(history["loss"])
 
     else:
-        print(f"Using {epochs} epochs. You can ignore the epochs parameter if you want to use all epochs.")
+        print(
+            f"Using {epochs} epochs. You can ignore the epochs parameter if you want to use all epochs."
+        )
 
-    loss = history['loss']
-    val_loss = history['val_loss']
+    loss = history["loss"]
+    val_loss = history["val_loss"]
 
-    accuracy = history['accuracy']
-    val_accuracy = history['val_accuracy']
+    accuracy = history["accuracy"]
+    val_accuracy = history["val_accuracy"]
     eps = range(epochs)
 
     figure, axis = plt.subplots(2, 1)
-    axis[0].plot(eps, loss, 'r', label='Training loss')
-    axis[0].plot(eps, val_loss, 'b', label='Validation loss')
-    axis[0].set_title('Training and Validation Loss')
-    axis[0].set_xlabel('Epoch')
-    axis[0].set_ylabel('Loss Value')
+    axis[0].plot(eps, loss, "r", label="Training loss")
+    axis[0].plot(eps, val_loss, "b", label="Validation loss")
+    axis[0].set_title("Training and Validation Loss")
+    axis[0].set_xlabel("Epoch")
+    axis[0].set_ylabel("Loss Value")
     axis[0].set_ylim([0, 2])
     axis[0].legend()
 
-    axis[1].plot(eps, accuracy, 'r', label='Training accuracy')
-    axis[1].plot(eps, val_accuracy, 'b', label='Validation accuracy')
-    axis[1].set_title('Training and Validation accuracy')
-    axis[1].set_xlabel('Epoch')
-    axis[1].set_ylabel('Accuracy Value')
+    axis[1].plot(eps, accuracy, "r", label="Training accuracy")
+    axis[1].plot(eps, val_accuracy, "b", label="Validation accuracy")
+    axis[1].set_title("Training and Validation accuracy")
+    axis[1].set_xlabel("Epoch")
+    axis[1].set_ylabel("Accuracy Value")
     axis[1].set_ylim([0, 1])
     axis[1].legend()
 
@@ -64,11 +55,13 @@ def plot_model_history(history, epochs=None, path_to_persist=None):
         figure.savefig(path_to_persist)
         plt.close(figure)
     else:
-        print(f'Highest Validation Accuracy: {np.max(val_accuracy)}')
+        print(f"Highest Validation Accuracy: {np.max(val_accuracy)}")
         plt.show()
 
-        
-def get_confusion_matrix_for_model_and_data(model: keras.Model, x_test, y_test) -> np.ndarray:
+
+def get_confusion_matrix_for_model_and_data(
+    model: keras.Model, x_test, y_test
+) -> np.ndarray:
     """
     Use the model to predict the classes of the test data and then return the confusion matrix. You can visualize them
     as a matplotlib plot using the visualize_confusion_matrix function.
@@ -92,7 +85,9 @@ def get_confusion_matrix_for_model_and_data(model: keras.Model, x_test, y_test) 
     return confusion_matrix(y_test, y_pred)
 
 
-def visualize_confusion_matrix(confusion_matrix_: np.ndarray, model_name: str, dataset_name: str) -> None:
+def visualize_confusion_matrix(
+    confusion_matrix_: np.ndarray, model_name: str, dataset_name: str
+) -> None:
     """
     Visualize the confusion matrix as a heatmap using seaborn and matplotlib.
     Model Name and Dataset Name are used for the title of the plot.
@@ -104,8 +99,8 @@ def visualize_confusion_matrix(confusion_matrix_: np.ndarray, model_name: str, d
     plt.figure(figsize=(10, 10))
     sns.heatmap(confusion_matrix_, annot=True, fmt="d")
     plt.title(f"Confusion Matrix for {model_name} on {dataset_name}")
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
+    plt.ylabel("True label")
+    plt.xlabel("Predicted label")
     plt.show()
 
 
@@ -119,11 +114,14 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
     :param verbose: plotting can take some time, prints current dataset name to stdout.
     """
     if pdf_path is None:
-        pdf_path = remove_suffix(csv_path, '.csv') + '.pdf'
+        pdf_path = remove_suffix(csv_path, ".csv") + ".pdf"
     results_dataframe = pd.read_csv(csv_path)
     confusion_matrices = results_dataframe[
-        ['dataset_name', 'model_name', 'confusion_matrix', 'test_acc']].values.tolist()
-    datasets = groupby(lambda x: x[0], confusion_matrices)  # create a dict with dataset as key, and matrices as values
+        ["dataset_name", "model_name", "confusion_matrix", "test_acc"]
+    ].values.tolist()
+    datasets = groupby(
+        lambda x: x[0], confusion_matrices
+    )  # create a dict with dataset as key, and matrices as values
 
     # it is way faster to plot each dataset individually and then concat the resulting pdf
     # than letting matplotlib do everything at once
@@ -133,16 +131,21 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
         ncols = len(data)
         if verbose:
             print(dataset_name)
-        fig, axs = plt.subplots(nrows=1, ncols=ncols, sharex=True, sharey=True, figsize=(ncols * 10, 10))
+        fig, axs = plt.subplots(
+            nrows=1, ncols=ncols, sharex=True, sharey=True, figsize=(ncols * 10, 10)
+        )
         col = 0
-        for (_, model_name, confusion_matrix, test_acc) in data:
+        for _, model_name, confusion_matrix, test_acc in data:
             sns.heatmap(json.loads(confusion_matrix), annot=True, fmt="d", ax=axs[col])
-            axs[col].set_title(f"{model_name} on {dataset_name}\naccuracy: {round(test_acc, 3)}", fontsize=28)
-            axs[col].set_ylabel('True label', fontsize=24)
-            axs[col].set_xlabel('Predicted label', fontsize=24)
+            axs[col].set_title(
+                f"{model_name} on {dataset_name}\naccuracy: {round(test_acc, 3)}",
+                fontsize=28,
+            )
+            axs[col].set_ylabel("True label", fontsize=24)
+            axs[col].set_xlabel("Predicted label", fontsize=24)
             col = col + 1
         pdf_buffer = io.BytesIO()  # save intermediate pdf in-memory
-        plt.savefig(pdf_buffer, format='pdf')
+        plt.savefig(pdf_buffer, format="pdf")
         plt.close()
         merger.append(pdf_buffer)
         merger.add_outline_item(dataset_name, row, None)

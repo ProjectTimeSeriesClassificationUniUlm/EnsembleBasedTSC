@@ -1,30 +1,20 @@
 import csv
-import io
-import json
 from operator import concat
 
-import keras
-import numpy as np
-import pandas as pd
-from PyPDF2 import PdfMerger
-from sklearn.metrics import confusion_matrix
 from pathlib import Path
-import matplotlib.pyplot as plt
-import seaborn as sns
-from toolz import groupby, valmap
 from functools import partial, reduce
 
 
 def append_to_csv(csv_path, input_row):
-    with open(csv_path, 'a') as f_object:
+    with open(csv_path, "a") as f_object:
         writer = csv.writer(f_object)
         writer.writerow(input_row)
 
 
 def remove_suffix(input_string, suffix):
     if suffix and input_string.endswith(suffix):
-        return input_string[:-len(suffix)]
-    return input_string    
+        return input_string[: -len(suffix)]
+    return input_string
 
 
 def get_project_root() -> Path:
