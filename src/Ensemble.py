@@ -37,8 +37,8 @@ class Ensemble(tf.keras.Model):
             EnsembleMethods.AVERAGE : self.__average__,
             EnsembleMethods.LOGISTIC_AVERAGE : self.__logistic_average__,
             EnsembleMethods.MAJORITY_VOTE : self.__majority_vote__,
-            EnsembleMethods.AVERAGE_WITH_CONFIDENCE : self.__logistic_average_with_confidence__,
-            EnsembleMethods.LOGISTIC_AVERAGE_WITH_CONFIDENCE : self.__average_with_confidence__
+            EnsembleMethods.AVERAGE_WITH_CONFIDENCE : self.__average_with_confidence__,
+            EnsembleMethods.LOGISTIC_AVERAGE_WITH_CONFIDENCE : self.__logistic_average_with_confidence__
         }
         self.__ensemble_method__ = ensemble_types.get(ensemble_type, None)
         if self.__ensemble_method__ is None:
@@ -68,17 +68,17 @@ class Ensemble(tf.keras.Model):
                             first,
                             first)
     
-    def __average_with_confidence__(self, x, verbose="auto")
+    def __average_with_confidence__(self, x, verbose="auto"):
         pred = self.get_all_predictions(x, verbose)
         return tf.argmax(
                 np.apply_along_axis(self.__calculate_column_avg_with_confidence__, 0, pred),
                 axis=-1)
     
-    def __logistic_average_with_confidence__(self, x, verbose="auto")
-        pred = tf.math.sigmoid(self.get_all_predictions(x, verbose))
+    def __logistic_average_with_confidence__(self, x, verbose="auto"):
+        pred = self.get_all_predictions(x, verbose)
         return tf.argmax(
-                np.apply_along_axis(self.__calculate_column_avg_with_confidence__, 0, pred),
+                np.apply_along_axis(self.__calculate_column_avg_with_confidence__, 0, tf.math.sigmoid(pred)),
                 axis=-1)
     
-    def __calculate_column_avg_with_confidence__(pred_column):
+    def __calculate_column_avg_with_confidence__(self, pred_column):
         return np.average(pred_column, axis=0, weights = self.model_weights*pred_column*10)

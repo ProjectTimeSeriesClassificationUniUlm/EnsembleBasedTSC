@@ -15,6 +15,8 @@ from toolz import thread_first, thread_last, identity, count, groupby
 
 from Ensemble import EnsembleMethods, Ensemble
 from LoadData import CurrentDatasets, get_all_datasets_test_train_np_arrays
+from PreprocessData import preprocess_datasets, add_additive_white_gaussian_noise
+from Helpers import remove_suffix
 
 
 def plot_model_history(history, epochs=None, path_to_persist=None):
@@ -69,23 +71,18 @@ def flatten_models(models, weight=1):
     return weighted_models
 
 
-def load_models(dataset_name=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], model_path=None):
-    if model_path is None:
-        model_path = f'../models/'
-    model_path =  os.path.join(model_path, dataset_name)
+def load_models(dataset_name=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], models_path=None):
+    if models_path is None:
+        models_path = f'../models/'
+    models_path =  os.path.join(models_path, dataset_name)
     models_to_load = list(
-        filter(lambda model_name: remove_suffix(model_name,'.h5') in model_names, os.listdir(model_path)))
-    models = list(map(lambda filename: keras.models.load_model(model_path + "/" + filename), models_to_load))
+        filter(lambda model_name: remove_suffix(model_name,'.h5') in model_names, os.listdir(models_path)))
+    models = list(map(lambda filename: keras.models.load_model(models_path + "/" + filename), models_to_load))
     return models
 
 
-def remove_suffix(input_string, suffix):
-    if suffix and input_string.endswith(suffix):
-        return input_string[:-len(suffix)]
-    return input_string
 
-
-def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=False):
+def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=False, models_path=None):
     """
     Create an ensemble of given models and dataset
 
@@ -94,8 +91,7 @@ def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=Fals
     :return: ensemble methods used and class predictions
     """
     models, weights = list(zip(*flatten_models(models)))
-    print(np.array(zip(models, weights)))
-    models = load_models(evaluation_dataset, models)
+    models = load_models(evaluation_dataset, models, models_path=models_path)
     ensemble_methods = [method.value for method in EnsembleMethods]
     ensembles = list(map(lambda ensemble_type: Ensemble(models=models, weights=weights, ensemble_type=ensemble_type),
                          ensemble_methods))
@@ -111,7 +107,12 @@ def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=Fals
     return ensemble_methods, predictions
 
 
-def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], ensemble_name=None):
+def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, 
+                 model_names=['Encoder'], 
+                 ensemble_name=None, 
+                 models_path=None, 
+                 augmentation=False, 
+                 datasets_path='../datasets/'):
     """
     run an ensemble on a given dataset
 
@@ -123,10 +124,12 @@ def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_na
     if ensemble_name is None:
         ensemble_name = str(model_names)
 
-    x_test, y_test = get_all_datasets_test_train_np_arrays('../datasets/', [evaluation_dataset])[evaluation_dataset][
+    x_test, y_test = get_all_datasets_test_train_np_arrays(datasets_path, [evaluation_dataset])[evaluation_dataset][
         'test_data']
+    if augmentation:
+        x_test = np.array(list(map(add_additive_white_gaussian_noise, x_test)))
 
-    method_names, predicted_classes = get_ensemble_predictions(x_test, model_names, evaluation_dataset)
+    method_names, predicted_classes = get_ensemble_predictions(x_test, model_names, evaluation_dataset, models_path=models_path)
 
     dataset_names = [evaluation_dataset for _ in method_names]
     display_names = [f"{ensemble_name}-{method_name}" for method_name in method_names]
@@ -138,7 +141,10 @@ def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, model_na
 
 def run_ensembles(dataset_names=[CurrentDatasets.swedish_leaf.value, CurrentDatasets.fifty_words.value],
                   ensembles={"All": ["Encoder", "FCN", "MCDCNN", "MLP", "Resnet", "Time_CNN"]},
-                  verbose=False):
+                  verbose=False, 
+                  models_path=None, 
+                  datasets_path='../datasets/', 
+                  augmentation=False):
     """
     run multiple ensembles on given datasets
 
@@ -153,7 +159,7 @@ def run_ensembles(dataset_names=[CurrentDatasets.swedish_leaf.value, CurrentData
         if verbose:
             print(f"{i}/{len(dataset_names)}:\t{dataset_name}")
         for ensemble_name, model_names in ensembles.items():
-            for row in run_ensemble(dataset_name, model_names, ensemble_name):
+            for row in run_ensemble(dataset_name, model_names, ensemble_name, models_path=models_path, datasets_path=datasets_path, augmentation=augmentation):
                 result.loc[len(result)] = row
         i = i + 1
     return result

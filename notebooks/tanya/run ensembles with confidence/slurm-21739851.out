@@ -1,0 +1,64 @@
+1/1:	cricket_y
+x_test: [[-0.11105748 -0.09022612 -0.01983751 ... -0.52912551 -0.52302749
+  -0.52768319]
+ [ 0.60310085  0.44417446  0.42087495 ...  0.1473066   0.1554887
+   0.15103478]
+ [ 0.5028739   0.51713595  0.56797241 ...  0.5376856   0.55332614
+   0.54481222]
+ ...
+ [ 0.11665757 -0.23675922 -0.11618954 ... -0.20370227  0.14814326
+   0.14307585]
+ [-0.30038609 -0.31129898 -0.23701196 ... -0.28414469 -0.4141128
+  -0.41894275]
+ [-0.1846542  -0.29486701 -0.18302842 ... -0.28816946 -0.28222449
+  -0.28546063]]
+x_test augmentation: [[-0.50098346 -0.3297068  -0.12871234 ... -0.63912681 -0.49169606
+  -0.80823781]
+ [ 0.31301599  1.47547613  1.17760993 ... -0.75839076  0.27776988
+   0.17780642]
+ [ 0.91093978 -0.41562145  0.02680265 ...  0.88154571  1.18351037
+   0.36467812]
+ ...
+ [ 0.53427536 -0.88109876  0.53042238 ... -0.47759071  0.46087768
+  -0.11045728]
+ [-0.95229439  0.34709855 -0.31944594 ... -0.3832104  -0.74002432
+  -0.23709766]
+ [ 0.03199476 -1.30516298 -1.52829113 ... -0.37568588  0.28913873
+  -0.63907796]]
+-----------------------------------------------------------
+models:  ('MLP-0', 'MLP-1', 'MLP-2', 'MLP-3', 'MLP-4', 'MLP-5', 'MLP-6', 'MLP-7', 'MLP-8', 'MLP-9', 'Encoder-0', 'Encoder-1', 'Encoder-2', 'Encoder-3', 'Encoder-4', 'Encoder-5', 'Encoder-6', 'Encoder-7', 'Encoder-8', 'Encoder-9', 'Resnet-0', 'Resnet-1', 'Resnet-2', 'Resnet-3', 'Resnet-4', 'Resnet-5', 'Resnet-6', 'Resnet-7', 'Resnet-8', 'Resnet-9')
+30
+models:  (0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333, 0.03333333333333333)
+30
+Traceback (most recent call last):
+  File "run_ensembles.py", line 38, in <module>
+    run_ensembles(dataset_names=dataset_names, ensembles=used_ensembles, verbose=True, models_path=model_paths, datasets_path=datasets_path).to_csv(csv_name)
+  File "../../../src/Evaluation.py", line 170, in run_ensembles
+    for row in run_ensemble(dataset_name, model_names, ensemble_name, models_path=models_path, datasets_path=datasets_path):
+  File "../../../src/Evaluation.py", line 141, in run_ensemble
+    method_names, predicted_classes = get_ensemble_predictions(x_test, model_names, evaluation_dataset, models_path=models_path)
+  File "../../../src/Evaluation.py", line 106, in get_ensemble_predictions
+    predictions = list(map(lambda ensemble: np.array(ensemble.__ensemble_method__(x, verbose=0)),
+  File "../../../src/Evaluation.py", line 106, in <lambda>
+    predictions = list(map(lambda ensemble: np.array(ensemble.__ensemble_method__(x, verbose=0)),
+  File "../../../src/Ensemble.py", line 58, in __average__
+    return tf.argmax(np.average(pred, axis=0, weights=self.model_weights), axis=-1)
+  File "<__array_function__ internals>", line 200, in average
+  File "/opt/bwhpc/common/jupyter/tensorflow/2023-01-02/lib/python3.8/site-packages/numpy/lib/function_base.py", line 539, in average
+    raise ValueError(
+ValueError: Length of weights not compatible with specified axis.
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n520
+Job ID: 21739851
+Cluster: uc2
+User/Group: ul_dgb62/ul_student
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 00:00:12
+CPU Efficiency: 0.21% of 01:36:00 core-walltime
+Job Wall-clock time: 00:02:24
+Memory Utilized: 2.59 GB
+Memory Efficiency: 8.82% of 29.30 GB

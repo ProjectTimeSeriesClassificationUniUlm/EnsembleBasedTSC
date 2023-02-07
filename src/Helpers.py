@@ -72,7 +72,7 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
     :param verbose: plotting can take some time, prints current dataset name to stdout.
     """
     if pdf_path is None:
-        pdf_path = csv_path.removesuffix('.csv') + '.pdf'
+        pdf_path = remove_suffix(csv_path, '.csv') + '.pdf'
     results_dataframe = pd.read_csv(csv_path)
     confusion_matrices = results_dataframe[
         ['dataset_name', 'model_name', 'confusion_matrix', 'test_acc']].values.tolist()
@@ -103,6 +103,12 @@ def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=
         row = row + 1
     merger.write(pdf_path)
     merger.close()
+
+    
+def remove_suffix(input_string, suffix):
+    if suffix and input_string.endswith(suffix):
+        return input_string[:-len(suffix)]
+    return input_string    
 
 
 def get_project_root() -> Path:

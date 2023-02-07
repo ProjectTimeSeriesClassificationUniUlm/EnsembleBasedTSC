@@ -68,7 +68,7 @@ class AdditiveWhiteGaussianNoise(Layer):
         return dict(list(base_config.items()) + list(config.items()))
     
     
-def add_additive_white_gaussian_noise(ts, noise_stddev=0.5):
+def add_additive_white_gaussian_noise(ts, noise_stddev=0.2):
     # generate random numbers from a Gaussian distribution with the given standard deviation 
     noise = np.random.normal(0, noise_stddev, len(ts)) 
     # add the noise to the signal 
