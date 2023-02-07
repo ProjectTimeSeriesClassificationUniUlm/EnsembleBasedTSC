@@ -2,7 +2,10 @@ import json
 import os
 from functools import partial
 
+import io
+import csv
 import numpy as np
+import pandas as pd
 from itertools import combinations
 import tensorflow_addons  # needed for model import, do not remove
 import pandas
@@ -11,7 +14,12 @@ from matplotlib import pyplot as plt
 from numpy import array_equal
 from sklearn.metrics import accuracy_score, confusion_matrix
 from tensorflow import keras
-from toolz import thread_first, thread_last, identity, count, groupby
+from toolz import thread_first, thread_last, identity, count, groupby, valmap
+from PyPDF2 import PdfMerger
+from pathlib import Path
+import matplotlib.pyplot as plt
+import seaborn as sns
+from functools import partial, reduce
 
 from Ensemble import EnsembleMethods, Ensemble
 from LoadData import CurrentDatasets, get_all_datasets_test_train_np_arrays
@@ -59,107 +67,86 @@ def plot_model_history(history, epochs=None, path_to_persist=None):
         print(f'Highest Validation Accuracy: {np.max(val_accuracy)}')
         plt.show()
 
-
-def flatten_models(models, weight=1):
-    individual_weight = weight / len(models)
-    grouped_models = groupby(lambda m: isinstance(m, list), models)
-    models = grouped_models.get(False, [])
-    weighted_models = list(zip(models, [individual_weight] * len(models)))
-    model_lists = grouped_models.get(True, [])
-    for model in model_lists:
-        weighted_models = weighted_models + flatten_models(model, weight=individual_weight)
-    return weighted_models
-
-
-def load_models(dataset_name=CurrentDatasets.swedish_leaf.value, model_names=['Encoder'], models_path=None):
-    if models_path is None:
-        models_path = f'../models/'
-    models_path =  os.path.join(models_path, dataset_name)
-    models_to_load = list(
-        filter(lambda model_name: remove_suffix(model_name,'.h5') in model_names, os.listdir(models_path)))
-    models = list(map(lambda filename: keras.models.load_model(models_path + "/" + filename), models_to_load))
-    return models
-
-
-
-def get_ensemble_predictions(x, models, evaluation_dataset, check_identical=False, models_path=None):
+        
+def get_confusion_matrix_for_model_and_data(model: keras.Model, x_test, y_test) -> np.ndarray:
     """
-    Create an ensemble of given models and dataset
+    Use the model to predict the classes of the test data and then return the confusion matrix. You can visualize them
+    as a matplotlib plot using the visualize_confusion_matrix function.
 
-    :param x: prediction input
-    :param models: models to be ensembled
-    :return: ensemble methods used and class predictions
+    Usage:
+    Returns a matrix C where C_{i, j} is equal to the number of observations known to be in group i but predicted to be in group j.
+    That is if the model predicts the class 0 for 10 observations and the true class is 1 for 5 of them, then C[0, 1] = 5.
+
+    For binary classification, C[0, 0] is the number of true negatives, C[0, 1] is the number of false positives,
+    C[1, 0] is the number of false negatives, and C[1, 1] is the number of true positives. A perfect classifier
+    would have C[0, 1] = C[1, 0] = 0. More general: In a perfect classifier, all entries of C are zero except for those
+    on the main diagonal, which are equal to the number of observations in each group.
+
+    :param model: The model to use for prediction.
+    :param x_test: The test data.
+    :param y_test: The test labels.
+    :return: The confusion matrix as a numpy array.
     """
-    models, weights = list(zip(*flatten_models(models)))
-    models = load_models(evaluation_dataset, models, models_path=models_path)
-    ensemble_methods = [method.value for method in EnsembleMethods]
-    ensembles = list(map(lambda ensemble_type: Ensemble(models=models, weights=weights, ensemble_type=ensemble_type),
-                         ensemble_methods))
-    predictions = list(map(lambda ensemble: np.array(ensemble.__ensemble_method__(x, verbose=0)),
-                           ensembles))
-    # check for identical predictions
-    if check_identical:
-        identical_predictions_count = thread_last(combinations(predictions, 2),
-                                                  (map, lambda comb: array_equal(comb[0], comb[1])),
-                                                  (filter, identity),
-                                                  count)
-        print(f"{identical_predictions_count} identical predictions found")
-    return ensemble_methods, predictions
+    y_pred = model.predict(x_test)
+    y_pred = np.argmax(y_pred, axis=1)
+    return confusion_matrix(y_test, y_pred)
 
 
-def run_ensemble(evaluation_dataset=CurrentDatasets.swedish_leaf.value, 
-                 model_names=['Encoder'], 
-                 ensemble_name=None, 
-                 models_path=None, 
-                 augmentation=False, 
-                 datasets_path='../datasets/'):
+def visualize_confusion_matrix(confusion_matrix_: np.ndarray, model_name: str, dataset_name: str) -> None:
     """
-    run an ensemble on a given dataset
+    Visualize the confusion matrix as a heatmap using seaborn and matplotlib.
+    Model Name and Dataset Name are used for the title of the plot.
 
-    :param evaluation_dataset: dataset name
-    :param model_names: model names to be ensembled, can be a nested list. Nested lists get weighted
-    :param ensemble_name
-    :return: list of accuracies and confusion matrices
+    :param confusion_matrix_: The confusion matrix to visualize generated by the get_confusion_matrix_for_model_and_data function.
+    :param model_name: The name of the model.
+    :param dataset_name: The name of the dataset.
     """
-    if ensemble_name is None:
-        ensemble_name = str(model_names)
-
-    x_test, y_test = get_all_datasets_test_train_np_arrays(datasets_path, [evaluation_dataset])[evaluation_dataset][
-        'test_data']
-    if augmentation:
-        x_test = np.array(list(map(add_additive_white_gaussian_noise, x_test)))
-
-    method_names, predicted_classes = get_ensemble_predictions(x_test, model_names, evaluation_dataset, models_path=models_path)
-
-    dataset_names = [evaluation_dataset for _ in method_names]
-    display_names = [f"{ensemble_name}-{method_name}" for method_name in method_names]
-    accuracies = list(map(partial(accuracy_score, y_test), predicted_classes))
-    confusion_matrices = list(map(lambda predicted: json.dumps(confusion_matrix(y_test, predicted).tolist()),
-                                  predicted_classes))
-    return list(zip(dataset_names, display_names, accuracies, confusion_matrices))
+    plt.figure(figsize=(10, 10))
+    sns.heatmap(confusion_matrix_, annot=True, fmt="d")
+    plt.title(f"Confusion Matrix for {model_name} on {dataset_name}")
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
 
 
-def run_ensembles(dataset_names=[CurrentDatasets.swedish_leaf.value, CurrentDatasets.fifty_words.value],
-                  ensembles={"All": ["Encoder", "FCN", "MCDCNN", "MLP", "Resnet", "Time_CNN"]},
-                  verbose=False, 
-                  models_path=None, 
-                  datasets_path='../datasets/', 
-                  augmentation=False):
+def create_confusion_matrix_plot_from_csv(csv_path: str, pdf_path=None, verbose=False):
     """
-    run multiple ensembles on given datasets
+    Save the confusion matrices from given csv as a heatmap using seaborn and matplotlib as pdf.
+    Model Name and Dataset Name are used for the title of the plot.
 
-    :param dataset_names
-    :param ensembles: dictonary of ensembles
-    :param verbose: prints progress
-    :return: pandas dataframe with ensemble results
+    :param csv_path: The csv file containing training data
+    :param pdf_path: The pdf file name containing confusion matrices. Gets automatically generated from the csv_path
+    :param verbose: plotting can take some time, prints current dataset name to stdout.
     """
-    result = pandas.DataFrame(columns=['dataset_name', 'model_name', 'test_acc', 'confusion_matrix'])
-    i = 1
-    for dataset_name in dataset_names:
+    if pdf_path is None:
+        pdf_path = remove_suffix(csv_path, '.csv') + '.pdf'
+    results_dataframe = pd.read_csv(csv_path)
+    confusion_matrices = results_dataframe[
+        ['dataset_name', 'model_name', 'confusion_matrix', 'test_acc']].values.tolist()
+    datasets = groupby(lambda x: x[0], confusion_matrices)  # create a dict with dataset as key, and matrices as values
+
+    # it is way faster to plot each dataset individually and then concat the resulting pdf
+    # than letting matplotlib do everything at once
+    merger = PdfMerger()
+    row = 0
+    for dataset_name, data in datasets.items():
+        ncols = len(data)
         if verbose:
-            print(f"{i}/{len(dataset_names)}:\t{dataset_name}")
-        for ensemble_name, model_names in ensembles.items():
-            for row in run_ensemble(dataset_name, model_names, ensemble_name, models_path=models_path, datasets_path=datasets_path, augmentation=augmentation):
-                result.loc[len(result)] = row
-        i = i + 1
-    return result
+            print(dataset_name)
+        fig, axs = plt.subplots(nrows=1, ncols=ncols, sharex=True, sharey=True, figsize=(ncols * 10, 10))
+        col = 0
+        for (_, model_name, confusion_matrix, test_acc) in data:
+            sns.heatmap(json.loads(confusion_matrix), annot=True, fmt="d", ax=axs[col])
+            axs[col].set_title(f"{model_name} on {dataset_name}\naccuracy: {round(test_acc, 3)}", fontsize=28)
+            axs[col].set_ylabel('True label', fontsize=24)
+            axs[col].set_xlabel('Predicted label', fontsize=24)
+            col = col + 1
+        pdf_buffer = io.BytesIO()  # save intermediate pdf in-memory
+        plt.savefig(pdf_buffer, format='pdf')
+        plt.close()
+        merger.append(pdf_buffer)
+        merger.add_outline_item(dataset_name, row, None)
+        pdf_buffer.close()
+        row = row + 1
+    merger.write(pdf_path)
+    merger.close()

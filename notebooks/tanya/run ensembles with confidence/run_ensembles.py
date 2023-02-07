@@ -22,19 +22,23 @@ dataset_names = [dataset.value for dataset in CurrentDatasets][:1]
 # in a nested list all elements on the same level get equal weights
 # eg [foo, [bar, bar, bar, [baz, baz]]] is weighted [1/2, [1/8, 1/8, 1/8, [1/16, 1/16]]]
 
-ensembles = {"All": [[f"MLP-{number}" for number in range(0,10)],
-                     [f"Encoder-{number}" for number in range(0,10)],
-                     [f"Resnet-{number}" for number in range(0,10)]],
-             "MLP10": [f"MLP-{number}" for number in range(0,10)],
-             "Encoder10": [f"Encoder-{number}" for number in range(0,10)],
-             "Resnet10": [f"Resnet-{number}" for number in range(0,10)],
-             "NNE": [[f"Resnet-{number}" for number in range(0,10)],
-                     [f"Encoder-{number}" for number in range(0,10)]]}
-csv_name = './ensembles_with_confidence.csv'
+dataset_names = [dataset.value for dataset in CurrentDatasets][:2]
+
+# in a nested list all elements on the same level get equal weights
+# eg [foo, [bar, bar, bar, [baz, baz]]] is weighted [1/2, [1/8, 1/8, 1/8, [1/16, 1/16]]]
+
+ensembles = {"All": ["MLP", "Encoder", "FCN"]}
 model_paths = '../../../models'
 datasets_path = '../../../datasets'
 
 used_ensembles=ensembles
-run_ensembles(dataset_names=dataset_names, ensembles=used_ensembles, verbose=True, models_path=model_paths, datasets_path=datasets_path).to_csv(csv_name)
 
+
+ens_builder = EnsembleBuilder(dataset_names=dataset_names, 
+                              ensembles=used_ensembles, 
+                              verbose=True, 
+                              models_path=model_paths, 
+                              datasets_path=datasets_path)
+csv_name = './ensembles_with_confidence.csv'
+ens_builder.run_ensembles().to_csv(csv_name)
 create_confusion_matrix_plot_from_csv(csv_name, verbose=True)
