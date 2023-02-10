@@ -59,6 +59,58 @@ def plot_model_history(history, epochs=None, path_to_persist=None):
         plt.show()
 
 
+def plot_accuracies_scatter_plot(
+    df,
+    title="Test average accuracies",
+    x_column="avg_test_acc",
+    y_column="model_name",
+    path_to_persist=None,
+):
+    sns.set(
+        rc={
+            "grid.color": "grey",
+            "grid.linestyle": ":",
+            "figure.figsize": (10, 6),
+            "axes.labelsize": 15,
+            "axes.titlesize": 20,
+        }
+    )
+    fig, ax = plt.subplots()
+    sns.scatterplot(data=df, s=100, x=x_column, y=y_column).set(title=title)
+    if path_to_persist:
+        fig.savefig(path_to_persist)
+        plt.close(figure)
+
+
+def plot_accuracies_bar_plot(
+    df,
+    title="Test average accuracies",
+    x_column="avg_test_acc",
+    y_column="model_name",
+    path_to_persist=None,
+):
+    sns.set(
+        rc={
+            "grid.color": "grey",
+            "grid.linestyle": ":",
+            "figure.figsize": (10, 6),
+            "axes.labelsize": 15,
+            "axes.titlesize": 20,
+        }
+    )
+    fig, ax = plt.subplots()
+    sns.barplot(
+        data=df,
+        x=x_column,
+        y=y_column,
+        errorbar=("sd", 95),
+        palette=sns.color_palette("Spectral", len(df)),
+    ).set(title=title)
+    if path_to_persist:
+        fig.savefig(path_to_persist)
+        plt.close(figure)
+
+
 def get_confusion_matrix_for_model_and_data(
     model: keras.Model, x_test, y_test
 ) -> np.ndarray:
