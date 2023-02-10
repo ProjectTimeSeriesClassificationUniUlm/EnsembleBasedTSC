@@ -6,6 +6,7 @@ Project based on the paper Deep Neural Network Ensembles for Time Series Classif
 ## TODO:
 - [X] Simplify Notebooks by creating functions that are used by everyone -> Felix
 - [X] Use glorot initialization for the weights (see https://keras.io/api/layers/initializers/) -> Felix
+- [ ] critical difference diagrams (https://github.com/hfawaz/cd-diagram) -> felix
 - [-] Aufschreiben, welche Datensätze komisch sind und entscheiden, welche wir benutzen -> Tanja
 - [ ] Ensembles evaluieren -> Felix (3 confusion matrices erstellen + test acc)
 - [ ] Transfer Learning für FCN -> anders implementieren; Funktion die ein Dataset für Tuning, eins für Finetuning, und Model erhält  -> Tim
