@@ -1,5 +1,8 @@
 import os
 import json
+from itertools import combinations
+
+from numpy import array_equal
 from sklearn.metrics import accuracy_score, confusion_matrix
 from tensorflow import keras
 from toolz import count, groupby, identity, thread_last
@@ -21,7 +24,7 @@ class EnsembleBuilder:
             CurrentDatasets.swedish_leaf.value,
             CurrentDatasets.fifty_words.value,
         ],
-        ensembles={"All": ["Encoder", "FCN", "MCDCNN", "MLP", "Resnet", "Time_CNN"]},
+        ensembles={"All": ["Encoder-0", "FCN-0", "MCDCNN-0", "MLP-0", "Resnet-0", "Time_CNN-0"]},
         verbose=False,
         models_path=None,
         datasets_path="../datasets/",
@@ -53,6 +56,8 @@ class EnsembleBuilder:
             if self.verbose:
                 print(f"{i}/{len(self.dataset_names)}:\t{dataset_name}")
             for ensemble_name, model_names in self.ensembles.items():
+                if self.verbose:
+                    print(f"\t{ensemble_name}")
                 for row in self._run_ensemble(
                     ensemble_name, model_names, dataset_name, augmentation
                 ):
@@ -77,7 +82,6 @@ class EnsembleBuilder:
         """
         if ensemble_name is None:
             ensemble_name = str(self.model_names)
-
         x_test, y_test = get_all_datasets_test_train_np_arrays(
             self.datasets_path, [evaluation_dataset]
         )[evaluation_dataset]["test_data"]
@@ -114,6 +118,7 @@ class EnsembleBuilder:
         :return: ensemble methods used and class predictions
         """
         models, weights = list(zip(*self._flatten_models(model_names)))
+
         models = self._load_models(evaluation_dataset, models)
         ensembles = list(
             map(
@@ -169,7 +174,7 @@ class EnsembleBuilder:
         weighted_models = list(zip(models, [individual_weight] * len(models)))
         model_lists = grouped_models.get(True, [])
         for model in model_lists:
-            weighted_models = weighted_models + flatten_models(
+            weighted_models = weighted_models + self._flatten_models(
                 model, weight=individual_weight
             )
         return weighted_models

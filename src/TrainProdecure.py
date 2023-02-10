@@ -15,8 +15,8 @@ from tqdm.keras import TqdmCallback
 from Helpers import (
     append_to_csv,
     get_project_root,
-    get_confusion_matrix_for_model_and_data,
 )
+from Evaluation import get_confusion_matrix_for_model_and_data
 from LoadData import get_all_datasets_test_train_np_arrays
 from ModelBuilder import get_model_name
 from PreprocessData import preprocess_datasets
