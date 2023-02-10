@@ -12,10 +12,10 @@ import tensorflow as tf
 from tqdm.auto import tqdm
 from tqdm.keras import TqdmCallback
 
+from Evaluation import get_confusion_matrix_for_model_and_data
 from Helpers import (
     append_to_csv,
     get_project_root,
-    get_confusion_matrix_for_model_and_data,
 )
 from LoadData import get_all_datasets_test_train_np_arrays
 from ModelBuilder import get_model_name
