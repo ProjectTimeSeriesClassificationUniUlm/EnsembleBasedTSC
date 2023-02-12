@@ -99,6 +99,7 @@ def plot_accuracies_bar_plot(
         }
     )
     fig, ax = plt.subplots()
+    plt.xlim(0, 1)
     sns.barplot(
         data=df,
         x=x_column,
