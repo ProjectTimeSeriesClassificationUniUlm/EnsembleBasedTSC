@@ -22,7 +22,7 @@ class EnsembleBuilder:
         self,
         dataset_names=[
             CurrentDatasets.swedish_leaf.value,
-            CurrentDatasets.fifty_words.value,
+            CurrentDatasets.sony_robot.value,
         ],
         ensembles={"All": ["Encoder-0", "FCN-0", "MCDCNN-0", "MLP-0", "Resnet-0", "Time_CNN-0"]},
         verbose=False,

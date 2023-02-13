@@ -12,7 +12,6 @@ class CurrentDatasets(str, Enum):
     egg_five_days = "egg_five_days"
     electric_devices = "electric_devices"
     face_ucr = "face_ucr"
-    fifty_words = "fifty_words"
     mote_strain = "mote_strain"
     power_cons = "power_cons"
     sony_robot = "sony_robot"
