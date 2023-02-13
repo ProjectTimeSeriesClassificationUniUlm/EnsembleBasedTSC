@@ -50,7 +50,7 @@ def get_MLP(input_size, output_size):
     )
 
 
-def get_FCN(input_size, output_size):
+def get_FCN(input_size, output_size, transfer_learning=False):
     """
     Create a Fully Convolutional Model based on
     Z. Wang, W. Yan, and T. Oates, “Time series classification from scratch with deep neural networks: A strong baseline”, 2017
@@ -58,15 +58,13 @@ def get_FCN(input_size, output_size):
     :param output_size: number of classes
     :return: keras sequential model of the FCN
     """
+    first_layer = keras.layers.Conv1D(filters=256, kernel_size=8, padding="same", kernel_initializer=tf.keras.initializers.GlorotUniform()) \
+        if transfer_learning \
+        else keras.layers.Conv1D(filters=256, kernel_size=8, padding="same", input_shape=(input_size, 1), kernel_initializer=tf.keras.initializers.GlorotUniform())
+
     return keras.Sequential(
         [
-            keras.layers.Conv1D(
-                filters=128,
-                kernel_size=8,
-                padding="same",
-                input_shape=(input_size, 1),
-                kernel_initializer=tf.keras.initializers.GlorotUniform(),
-            ),
+            first_layer,
             keras.layers.BatchNormalization(),
             keras.layers.Activation("relu"),
             keras.layers.Conv1D(
