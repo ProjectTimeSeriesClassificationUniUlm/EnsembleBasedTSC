@@ -100,5 +100,5 @@ class Ensemble(tf.keras.Model):
 
     def __calculate_column_avg_with_confidence__(self, pred_column):
         return np.average(
-            pred_column, axis=0, weights=self.model_weights * pred_column * 10
+            pred_column, axis=0, weights=self.model_weights * (pred_column + 0.00001) * 10
         )
