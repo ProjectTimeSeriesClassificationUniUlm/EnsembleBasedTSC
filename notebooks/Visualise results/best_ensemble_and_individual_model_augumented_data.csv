@@ -1,0 +1,8 @@
+,model_name,avg_test_acc,ensemble,train_on_augmented_data
+6,NNE-logistic_average,0.8976609331671623,True,True
+0,Encoder10-average,0.890928641702023,True,True
+1,Encoder,0.836769950389862,False,True
+4,Resnet10-majority_vote,0.7742044413249888,True,True
+2,FCN10-majority_vote,0.689791795978341,True,True
+5,Resnet,0.6848629951477051,False,True
+3,FCN,0.6020792171359062,False,True
