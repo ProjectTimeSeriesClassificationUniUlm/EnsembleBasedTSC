@@ -14,9 +14,9 @@ class CurrentDatasets(str, Enum):
     face_ucr = "face_ucr"
     mote_strain = "mote_strain"
     power_cons = "power_cons"
-    share_price_increase = "sony_robot"
+    sony_robot = "sony_robot"
     swedish_leaf = "swedish_leaf"
-    wafer = "synthetic_control"
+    synthetic_control = "synthetic_control"
 
 
 DATASETS_MLP = [
