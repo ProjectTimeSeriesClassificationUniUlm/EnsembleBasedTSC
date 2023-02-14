@@ -19,16 +19,16 @@ from Helpers import remove_suffix
 
 class EnsembleBuilder:
     def __init__(
-        self,
-        dataset_names=[
-            CurrentDatasets.swedish_leaf.value,
-            CurrentDatasets.sony_robot.value,
-        ],
-        ensembles={"All": ["Encoder-0", "FCN-0", "MCDCNN-0", "MLP-0", "Resnet-0", "Time_CNN-0"]},
-        verbose=False,
-        models_path=None,
-        datasets_path="../datasets/",
-        ensemble_methods=None,
+            self,
+            dataset_names=[
+                CurrentDatasets.swedish_leaf.value,
+                CurrentDatasets.sony_robot.value,
+            ],
+            ensembles={"All": ["Encoder-0", "FCN-0", "MCDCNN-0", "MLP-0", "Resnet-0", "Time_CNN-0"]},
+            verbose=False,
+            models_path=None,
+            datasets_path="../datasets/",
+            ensemble_methods=None,
     ):
         self.dataset_names = dataset_names
         self.verbose = verbose
@@ -59,18 +59,18 @@ class EnsembleBuilder:
                 if self.verbose:
                     print(f"\t{ensemble_name}")
                 for row in self._run_ensemble(
-                    ensemble_name, model_names, dataset_name, augmentation
+                        ensemble_name, model_names, dataset_name, augmentation
                 ):
                     result.loc[len(result)] = row
             i = i + 1
         return result
 
     def _run_ensemble(
-        self,
-        ensemble_name,
-        model_names=["Encoder"],
-        evaluation_dataset=CurrentDatasets.swedish_leaf.value,
-        augmentation=False,
+            self,
+            ensemble_name,
+            model_names=["Encoder"],
+            evaluation_dataset=CurrentDatasets.swedish_leaf.value,
+            augmentation=False,
     ):
         """
         run an ensemble on a given dataset
@@ -108,7 +108,7 @@ class EnsembleBuilder:
         return list(zip(dataset_names, display_names, accuracies, confusion_matrices))
 
     def _get_ensemble_predictions(
-        self, x, evaluation_dataset, model_names, check_identical=False
+            self, x, evaluation_dataset, model_names, check_identical=False
     ):
         """
         Create an ensemble of given models and dataset
@@ -120,6 +120,7 @@ class EnsembleBuilder:
         models, weights = list(zip(*self._flatten_models(model_names)))
 
         models = self._load_models(evaluation_dataset, models)
+        weights = weights[:len(models)]  # TODO: properly implement this
         ensembles = list(
             map(
                 lambda ensemble_type: Ensemble(
@@ -146,7 +147,7 @@ class EnsembleBuilder:
         return predictions
 
     def _load_models(
-        self, dataset_name=CurrentDatasets.swedish_leaf.value, model_names=["Encoder"]
+            self, dataset_name=CurrentDatasets.swedish_leaf.value, model_names=["Encoder"]
     ):
         if self.models_path is None:
             self.models_path = f"../models/"
@@ -167,7 +168,7 @@ class EnsembleBuilder:
         )
         return models
 
-    def _flatten_models(self, models, weight=1):
+    def _flatten_models(self, models, weight=1.0):
         individual_weight = weight / len(models)
         grouped_models = groupby(lambda m: isinstance(m, list), models)
         models = grouped_models.get(False, [])
