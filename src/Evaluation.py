@@ -88,29 +88,44 @@ def plot_accuracies_bar_plot(
     x_column="avg_test_acc",
     y_column="model_name",
     path_to_persist=None,
+    figsize = (10,15)
 ):
-    sns.set(
-        rc={
-            "grid.color": "grey",
-            "grid.linestyle": ":",
-            "figure.figsize": (10, 6),
-            "axes.labelsize": 15,
-            "axes.titlesize": 20,
-        }
-    )
-    fig, ax = plt.subplots()
+    sns.set(rc={"grid.color": "grey",
+                "grid.linestyle": ":",
+                "figure.figsize":(10,6),
+                "axes.labelsize":15,
+                "axes.titlesize":20})
+    plt.figure(figsize = figsize)
     plt.xlim(0, 1)
-    sns.barplot(
-        data=df,
-        x=x_column,
-        y=y_column,
-        errorbar=("sd", 95),
-        palette=sns.color_palette("Spectral", len(df)),
-    ).set(title=title)
+    splot = sns.barplot(data=df, x=x_column, y=y_column, palette=sns.color_palette("Spectral", len(df)))
+    splot.set(title=title)
+    show_values_on_bar_plot(splot, "h", space=0)
     if path_to_persist:
         fig.savefig(path_to_persist)
         plt.close(figure)
 
+
+def show_values_on_bar_plot(axs, orient="v", space=.01):
+    def _single(ax):
+        if orient == "v":
+            for p in ax.patches:
+                _x = p.get_x() + p.get_width() / 2
+                _y = p.get_y() + p.get_height() + (p.get_height()*0.01)
+                value = '{:.3f}'.format(p.get_height())
+                ax.text(_x, _y, value, ha="center") 
+        elif orient == "h":
+            for p in ax.patches:
+                _x = p.get_x() + p.get_width() + float(space)
+                _y = p.get_y() + p.get_height() - (p.get_height()*0.5)
+                value = '{:.3f}'.format(p.get_width())
+                ax.text(_x, _y, value, ha="left")
+
+    if isinstance(axs, np.ndarray):
+        for idx, ax in np.ndenumerate(axs):
+            _single(ax)
+    else:
+        _single(axs)
+        
 
 def get_confusion_matrix_for_model_and_data(
     model: keras.Model, x_test, y_test

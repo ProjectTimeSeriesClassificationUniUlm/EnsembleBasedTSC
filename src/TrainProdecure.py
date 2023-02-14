@@ -107,6 +107,7 @@ def train(
     learning_rate=None,
     result_csv_path=None,
     unique_model_name=False,
+    check_existance = False
 ):
     """
     Trains given models on given datasets
@@ -160,6 +161,7 @@ def train(
     with strategy.scope():
         # train every dataset
         for ds_name, ds_data in tqdm(datasets.items(), unit="dataset"):
+            
             print("Dataset name: ", ds_name)
             x_test, y_test = ds_data["test_data"]
 
@@ -176,44 +178,47 @@ def train(
                 )
                 print("Model name: ", model_name)
                 model = get_model(input_size, output_size)
-
-                if learning_rate:
-                    model.compile(
-                        optimizer=optimizer(learning_rate=learning_rate),
-                        loss="sparse_categorical_crossentropy",
-                        metrics=["accuracy"],
-                    )
-                else:
-                    model.compile(
-                        optimizer=optimizer(),
-                        loss="sparse_categorical_crossentropy",
-                        metrics=["accuracy"],
-                    )
-
-                history = model.fit(
-                    ds_data["train_data"],
-                    epochs=epochs,  # batch_size=batch_size,
-                    callbacks=[TqdmCallback(verbose=0, desc=model_name)],
-                    verbose=0,
-                )
-                test_loss, test_acc = model.evaluate(x_test, y_test)
-                # save csv
-                row = [
-                    ds_name,
-                    model_name,
-                    test_loss,
-                    test_acc,
-                    json.dumps(
-                        get_confusion_matrix_for_model_and_data(
-                            model, x_test, y_test
-                        ).tolist()
-                    ),
-                    json.dumps(history.history),
-                ]
-                append_to_csv(result_csv_path, row)
-                # save model
+                
                 model_ds_path = model_path + "/" + ds_name
-                Path(model_ds_path).mkdir(exist_ok=True, parents=True)
-                model.save(model_ds_path + "/" + model_name + ".h5")
-                model_index = model_index + 1
+                path_to_model_file = model_ds_path + "/" + model_name + ".h5"
+                if (not check_existance) or (not Path(path_to_model_file).exists()):
+                    if learning_rate:
+                        model.compile(
+                            optimizer=optimizer(learning_rate=learning_rate),
+                            loss="sparse_categorical_crossentropy",
+                            metrics=["accuracy"],
+                        )
+                    else:
+                        model.compile(
+                            optimizer=optimizer(),
+                            loss="sparse_categorical_crossentropy",
+                            metrics=["accuracy"],
+                        )
+
+                    history = model.fit(
+                        ds_data["train_data"],
+                        epochs=epochs,  # batch_size=batch_size,
+                        callbacks=[TqdmCallback(verbose=0, desc=model_name)],
+                        verbose=0,
+                    )
+                    test_loss, test_acc = model.evaluate(x_test, y_test)
+                    # save csv
+                    row = [
+                        ds_name,
+                        model_name,
+                        test_loss,
+                        test_acc,
+                        json.dumps(
+                            get_confusion_matrix_for_model_and_data(
+                                model, x_test, y_test
+                            ).tolist()
+                        ),
+                        json.dumps(history.history),
+                    ]
+                    append_to_csv(result_csv_path, row)
+                    # save model
+
+                    Path(model_ds_path).mkdir(exist_ok=True, parents=True)
+                    model.save(path_to_model_file)
+                    model_index = model_index + 1
     return pd.read_csv(result_csv_path)

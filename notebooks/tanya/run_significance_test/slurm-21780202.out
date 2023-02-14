@@ -1,0 +1,15 @@
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n520
+Job ID: 21780202
+Cluster: uc2
+User/Group: ul_dgb62/ul_student
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 05:00:00 core-walltime
+Job Wall-clock time: 00:07:30
+Memory Utilized: 7.96 GB
+Memory Efficiency: 27.15% of 29.30 GB

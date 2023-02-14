@@ -11,9 +11,9 @@ Anmerkung: Während dem Programmieren Notizen für die Seminararbeit machen
 
 
 - [ ] 1) Erstellen Class MCDCNN improved -> Tim
-- [ ] 2) MCDCNN-10 for augmented data und not augmented data -> Felix
+- [ ] 2) MCDCNN-10 for augmented data und not augmented data -> Tim
 - [ ] 3) Ensembles noch Mal erstellen, weil die ensembles_dict gaendert wurde -> Felix
 
 - [ ] Ensemble für FCN evaluieren -> Tim
 - [ ] test_acc Unterschied für MCDCNN berechnen -> Tim
-- [ ] Significance test anschauen -> Tanja
+- [ ] Significance test anschauen -> Tanja ( critical difference diagrams (https://github.com/hfawaz/cd-diagram) )

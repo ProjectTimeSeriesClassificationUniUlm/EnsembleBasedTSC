@@ -17,8 +17,8 @@ class CurrentDatasets(str, Enum):
     sony_robot = "sony_robot"
     swedish_leaf = "swedish_leaf"
     synthetic_control = "synthetic_control"
-
-
+    
+    
 DATASETS_MLP = [
     "cbf",
     "car",
