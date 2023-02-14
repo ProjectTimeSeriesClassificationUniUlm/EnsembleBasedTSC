@@ -2,3 +2,5 @@ sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 --output=mlp.out 
 sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 --output=resnet.out train_modelsResnet.sh
 sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 --output=fcn.out train_modelsFCN.sh
 sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 --output=encoder.out train_modelsEncoder.sh
+
+sbatch -p dev_gpu_4 -n 40 -t 00:30:00 --mem 30000 --gres=gpu:4 --output=create_ensembles.out create_ensembles.sh

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "create_ensembles.py", line 16, in <module>
+    from Evaluation import create_confusion_matrix_plot_from_csv
+ModuleNotFoundError: No module named 'Evaluation'
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n520
+Job ID: 21782434
+Cluster: uc2
+User/Group: ul_dgb62/ul_student
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 00:00:04
+CPU Efficiency: 0.20% of 00:32:40 core-walltime
+Job Wall-clock time: 00:00:49
+Memory Utilized: 177.13 MB
+Memory Efficiency: 0.59% of 29.30 GB
