@@ -50,7 +50,7 @@ def get_MLP(input_size, output_size):
     )
 
 
-def get_FCN(input_size, output_size):
+def get_FCN(input_size, output_size, transfer_learning=False):
     """
     Create a Fully Convolutional Model based on
     Z. Wang, W. Yan, and T. Oates, “Time series classification from scratch with deep neural networks: A strong baseline”, 2017
@@ -58,15 +58,13 @@ def get_FCN(input_size, output_size):
     :param output_size: number of classes
     :return: keras sequential model of the FCN
     """
+    first_layer = keras.layers.Conv1D(filters=256, kernel_size=8, padding="same", kernel_initializer=tf.keras.initializers.GlorotUniform()) \
+        if transfer_learning \
+        else keras.layers.Conv1D(filters=256, kernel_size=8, padding="same", input_shape=(input_size, 1), kernel_initializer=tf.keras.initializers.GlorotUniform())
+
     return keras.Sequential(
         [
-            keras.layers.Conv1D(
-                filters=128,
-                kernel_size=8,
-                padding="same",
-                input_shape=(input_size, 1),
-                kernel_initializer=tf.keras.initializers.GlorotUniform(),
-            ),
+            first_layer,
             keras.layers.BatchNormalization(),
             keras.layers.Activation("relu"),
             keras.layers.Conv1D(
@@ -351,47 +349,34 @@ def get_Time_CNN(input_size, output_size):
         ]
     )
 
+
 def get_MCDCNN_improved(input_size, output_size):
     return build_MCDCNN(input_size, output_size, **json.loads("""{"nr_conv_layers": 2, "nr_conv_filters": 9, "kernel_size": 
     7, "padding_method": "same", "dense_size": 196, "nr_dense_layers": 2, "conv_activation": "relu", 
     "dense_activation": "relu", "pooling_method": "max_pool", "pooling_size": 2, "dropout_rate": 0.1, 
     "use_batchnorm": true}"""))
 
+
 def build_MCDCNN(input_size, output_size,
-                 conv_config=(8, 4), kernel_size=5, padding_method="same", dense_config=(732, ),
+                 nr_conv_layers=2, nr_conv_filters=8, kernel_size=5, padding_method="same",
+                 dense_size=732, nr_dense_layers=1,
                  conv_activation="sigmoid", dense_activation="sigmoid",
                  pooling_method=keras.layers.MaxPool1D, pooling_size=2,
                  dropout_rate=0.5, use_batchnorm=False):
     """
     Build a MCDCNN model which architecture is defined by the parameters.
-    :param input_size: Size of the input
-    :param output_size: Size of the output
-    :param conv_config: List of filters for each convolutional layer -> [filters, ...]
-    :param kernel_size: Size of the kernel for the convolutional layers
-    :param padding_method: The method used for padding the input (do not use "valid" padding) -> "same"  | "causal"
-    :param dense_config: List of units for each dense layer -> [units, ...]
-    :param conv_activation: Activation function for the convolutional layers
-    :param dense_activation: Activation function for the dense layers
-    :param pooling_method: The method used for pooling the output of the convolutional layers -> "avg_pool" | "max_pool"
-    :param pooling_size: The size of the pooling window
-    :param dropout_rate: The rate of the dropout layers. If dropout_rate=0, no dropout layers will be added
-    :param use_batchnorm: If True, batch normalization layers will be added after each convolutional and dense layer
     """
     if dropout_rate >= 1:
         raise ValueError(f"Dropout rate must be between 0 and 1 but is set to {dropout_rate}")
-    if not conv_config or len(conv_config) == 0:
-        raise ValueError(f"Convolutional configuration must not be empty but is set to {conv_config}")
-    if not dense_config or len(dense_config) == 0:
-        raise ValueError(f"Dense configuration must not be empty but is set to {dense_config}")
 
     model = keras.Sequential()
     model.add(keras.layers.Input((input_size, 1)))
 
     # Convolutional Layers
-    for filters in conv_config:
+    for i in range(nr_conv_layers):
         model.add(keras.layers.Conv1D(
-            filters=filters,
-            kernel_size=kernel_size,
+            filters=nr_conv_filters,
+            kernel_size=(kernel_size,),
             activation=conv_activation,
             input_shape=(input_size, 1),
             padding=padding_method,
@@ -404,8 +389,8 @@ def build_MCDCNN(input_size, output_size,
             model.add(keras.layers.Dropout(dropout_rate))
 
         model.add(
-            keras.layers.MaxPooling1D(pool_size=pooling_size) if pooling_method == "max_pool"
-            else keras.layers.AveragePooling1D(pool_size=pooling_size)
+            keras.layers.MaxPooling1D(pool_size=(pooling_size,)) if pooling_method == "max_pool"
+            else keras.layers.AveragePooling1D(pool_size=(pooling_size,))
         )
 
 
@@ -413,9 +398,9 @@ def build_MCDCNN(input_size, output_size,
     model.add(keras.layers.Flatten())
 
     # Dense Layers
-    for units in dense_config:
+    for i in range(nr_dense_layers):
         model.add(keras.layers.Dense(
-            units,
+            dense_size,
             activation=dense_activation,
             kernel_initializer=tf.keras.initializers.GlorotUniform(),
         ))
