@@ -1,0 +1,510 @@
+2023-02-14 00:25:07.987001: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-02-14 00:25:08.110564: I tensorflow/core/util/port.cc:104] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-02-14 00:25:09.040263: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/bwhpc/common/devel/cuda/11.8/lib64
+2023-02-14 00:25:09.040347: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/bwhpc/common/devel/cuda/11.8/lib64
+2023-02-14 00:25:09.040365: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2023-02-14 00:25:12.569732: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-02-14 00:25:14.469271: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 30896 MB memory:  -> device: 0, name: Tesla V100-SXM2-32GB, pci bus id: 0000:3a:00.0, compute capability: 7.0
+2023-02-14 00:25:14.469989: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 30952 MB memory:  -> device: 1, name: Tesla V100-SXM2-32GB, pci bus id: 0000:3b:00.0, compute capability: 7.0
+2023-02-14 00:25:14.470563: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 30953 MB memory:  -> device: 2, name: Tesla V100-SXM2-32GB, pci bus id: 0000:b2:00.0, compute capability: 7.0
+2023-02-14 00:25:14.471083: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 30953 MB memory:  -> device: 3, name: Tesla V100-SXM2-32GB, pci bus id: 0000:b3:00.0, compute capability: 7.0
+  0%|                                                                                                                                          | 0/37 [00:00<?, ?dataset/s]Dataset name:  cbf
+
+Train on "cbf":   0%|                                                                                                                            | 0/10 [00:00<?, ?model/s][A
+Train on "cbf": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 93.17model/s][ATrain on "cbf": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 92.97model/s]
+  3%|███▌                                                                                                                              | 1/37 [00:00<00:03,  9.27dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  gun_point_male_female
+
+Train on "gun_point_male_female":   0%|                                                                                                          | 0/10 [00:00<?, ?model/s][ATrain on "gun_point_male_female": 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.77model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  car
+
+Train on "car":   0%|                                                                                                                            | 0/10 [00:00<?, ?model/s][ATrain on "car": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.14model/s]
+  8%|██████████▌                                                                                                                       | 3/37 [00:00<00:03, 10.12dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  abnormal_heartbeat
+
+Train on "abnormal_heartbeat":   0%|                                                                                                             | 0/10 [00:00<?, ?model/s][ATrain on "abnormal_heartbeat": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.01model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  distal_phalanax_tw
+
+Train on "distal_phalanax_tw":   0%|                                                                                                             | 0/10 [00:00<?, ?model/s][ATrain on "distal_phalanax_tw": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.34model/s]
+ 14%|█████████████████▌                                                                                                                | 5/37 [00:00<00:03, 10.30dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  phalanges_outlines_correct
+
+Train on "phalanges_outlines_correct":   0%|                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "phalanges_outlines_correct": 100%|███████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 102.67model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  swedish_leaf
+
+Train on "swedish_leaf":   0%|                                                                                                                   | 0/10 [00:00<?, ?model/s][ATrain on "swedish_leaf": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.94model/s]
+ 19%|████████████████████████▌                                                                                                         | 7/37 [00:00<00:02, 10.31dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  mote_strain
+
+Train on "mote_strain":   0%|                                                                                                                    | 0/10 [00:00<?, ?model/s][ATrain on "mote_strain": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.70model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  share_price_increase
+
+Train on "share_price_increase":   0%|                                                                                                           | 0/10 [00:00<?, ?model/s][ATrain on "share_price_increase": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.33model/s]
+ 24%|███████████████████████████████▌                                                                                                  | 9/37 [00:00<00:02, 10.37dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  large_kitchen_appliances
+
+Train on "large_kitchen_appliances":   0%|                                                                                                       | 0/10 [00:00<?, ?model/s][ATrain on "large_kitchen_appliances": 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.45model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  distal_phalanx_outline
+
+Train on "distal_phalanx_outline":   0%|                                                                                                         | 0/10 [00:00<?, ?model/s][ATrain on "distal_phalanx_outline": 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.49model/s]
+ 30%|██████████████████████████████████████▎                                                                                          | 11/37 [00:01<00:02, 10.42dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  strawberry
+
+Train on "strawberry":   0%|                                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "strawberry": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.46model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  egg_five_days
+
+Train on "egg_five_days":   0%|                                                                                                                  | 0/10 [00:00<?, ?model/s][ATrain on "egg_five_days": 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.47model/s]
+ 35%|█████████████████████████████████████████████▎                                                                                   | 13/37 [00:01<00:02, 10.43dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  earthquakes
+
+Train on "earthquakes":   0%|                                                                                                                    | 0/10 [00:00<?, ?model/s][ATrain on "earthquakes": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.25model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  electric_devices
+
+Train on "electric_devices":   0%|                                                                                                               | 0/10 [00:00<?, ?model/s][ATrain on "electric_devices": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.64model/s]
+ 41%|████████████████████████████████████████████████████▎                                                                            | 15/37 [00:01<00:02, 10.44dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  fifty_words
+
+Train on "fifty_words":   0%|                                                                                                                    | 0/10 [00:00<?, ?model/s][ATrain on "fifty_words": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.84model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  freezers
+
+Train on "freezers":   0%|                                                                                                                       | 0/10 [00:00<?, ?model/s][ATrain on "freezers": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.62model/s]
+ 46%|███████████████████████████████████████████████████████████▎                                                                     | 17/37 [00:01<00:01, 10.47dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  synthetic_control
+
+Train on "synthetic_control":   0%|                                                                                                              | 0/10 [00:00<?, ?model/s][ATrain on "synthetic_control": 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.67model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  gun_point_age_span
+
+Train on "gun_point_age_span":   0%|                                                                                                             | 0/10 [00:00<?, ?model/s][ATrain on "gun_point_age_span": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.73model/s]
+ 51%|██████████████████████████████████████████████████████████████████▏                                                              | 19/37 [00:01<00:01, 10.47dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  trace
+
+Train on "trace":   0%|                                                                                                                          | 0/10 [00:00<?, ?model/s][ATrain on "trace": 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 103.63model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  fish
+
+Train on "fish":   0%|                                                                                                                           | 0/10 [00:00<?, ?model/s][ATrain on "fish": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 103.98model/s]
+ 57%|█████████████████████████████████████████████████████████████████████████▏                                                       | 21/37 [00:02<00:01, 10.43dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  middle_phalanx_age_group
+
+Train on "middle_phalanx_age_group":   0%|                                                                                                       | 0/10 [00:00<?, ?model/s][ATrain on "middle_phalanx_age_group": 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.52model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  lightning_7
+
+Train on "lightning_7":   0%|                                                                                                                    | 0/10 [00:00<?, ?model/s][ATrain on "lightning_7": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.29model/s]
+ 62%|████████████████████████████████████████████████████████████████████████████████▏                                                | 23/37 [00:02<00:01, 10.44dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  colposcopy
+
+Train on "colposcopy":   0%|                                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "colposcopy": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.44model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  cricket_y
+
+Train on "cricket_y":   0%|                                                                                                                      | 0/10 [00:00<?, ?model/s][ATrain on "cricket_y": 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.13model/s]
+ 68%|███████████████████████████████████████████████████████████████████████████████████████▏                                         | 25/37 [00:02<00:01, 10.45dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  coffee_beans
+
+Train on "coffee_beans":   0%|                                                                                                                   | 0/10 [00:00<?, ?model/s][ATrain on "coffee_beans": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.55model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  gun_point_old_young
+
+Train on "gun_point_old_young":   0%|                                                                                                            | 0/10 [00:00<?, ?model/s][ATrain on "gun_point_old_young": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.20model/s]
+ 73%|██████████████████████████████████████████████████████████████████████████████████████████████▏                                  | 27/37 [00:02<00:00, 10.46dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  middle_phalanx_correct
+
+Train on "middle_phalanx_correct":   0%|                                                                                                         | 0/10 [00:00<?, ?model/s][ATrain on "middle_phalanx_correct": 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.68model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  bme
+
+Train on "bme":   0%|                                                                                                                            | 0/10 [00:00<?, ?model/s][ATrain on "bme": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.75model/s]
+ 78%|█████████████████████████████████████████████████████████████████████████████████████████████████████                            | 29/37 [00:02<00:00, 10.48dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  plane
+
+Train on "plane":   0%|                                                                                                                          | 0/10 [00:00<?, ?model/s][ATrain on "plane": 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.70model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  power_cons
+
+Train on "power_cons":   0%|                                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "power_cons": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 103.29model/s]
+ 84%|████████████████████████████████████████████████████████████████████████████████████████████████████████████                     | 31/37 [00:02<00:00, 10.46dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  face_ucr
+
+Train on "face_ucr":   0%|                                                                                                                       | 0/10 [00:00<?, ?model/s][ATrain on "face_ucr": 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.87model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  medical_images
+
+Train on "medical_images":   0%|                                                                                                                 | 0/10 [00:00<?, ?model/s][ATrain on "medical_images": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 105.15model/s]
+ 89%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████              | 33/37 [00:03<00:00, 10.47dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  chlorine_concentration
+
+Train on "chlorine_concentration":   0%|                                                                                                         | 0/10 [00:00<?, ?model/s][ATrain on "chlorine_concentration": 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 104.18model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  dodger_loop_day
+
+Train on "dodger_loop_day":   0%|                                                                                                                | 0/10 [00:00<?, ?model/s][ATrain on "dodger_loop_day": 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 106.68model/s]
+ 95%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████       | 35/37 [00:03<00:00, 10.48dataset/s]Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  arrow_head
+
+Train on "arrow_head":   0%|                                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "arrow_head": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 107.24model/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Dataset name:  sony_robot
+
+Train on "sony_robot":   0%|                                                                                                                     | 0/10 [00:00<?, ?model/s][ATrain on "sony_robot": 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 107.27model/s]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 37/37 [00:03<00:00, 10.54dataset/s]100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 37/37 [00:03<00:00, 10.44dataset/s]
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+Model name:  MLP-0
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n520
+Job ID: 21780295
+Cluster: uc2
+User/Group: ul_dgb62/ul_student
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 00:00:21
+CPU Efficiency: 1.09% of 00:32:00 core-walltime
+Job Wall-clock time: 00:00:48
+Memory Utilized: 5.56 GB
+Memory Efficiency: 18.98% of 29.30 GB
